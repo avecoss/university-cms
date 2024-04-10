@@ -16,5 +16,4 @@ public class UniversityCmsApplication {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
-
 }
