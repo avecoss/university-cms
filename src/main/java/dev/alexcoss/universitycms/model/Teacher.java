@@ -3,6 +3,7 @@ package dev.alexcoss.universitycms.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class Teacher extends Person {
     private long id;
 
     @OneToMany(mappedBy = "teacher", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private List<Course> courses;
+    private List<Course> courses = new ArrayList<>();
 
     public void addCourse(Course course) {
         courses.add(course);

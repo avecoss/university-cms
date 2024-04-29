@@ -3,6 +3,7 @@ package dev.alexcoss.universitycms.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "courses", callSuper = true)
 @ToString(exclude = "courses", callSuper = true)
 @Entity
-@Table(name = "students", schema = "university")
+@Table(name = "student", schema = "university")
 public class Student extends Person {
 
     @Id
@@ -24,5 +25,5 @@ public class Student extends Person {
     private Group group;
 
     @ManyToMany(mappedBy = "students")
-    private Set<Course> courses;
+    private Set<Course> courses = new HashSet<>();
 }

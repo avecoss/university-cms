@@ -4,47 +4,46 @@ import dev.alexcoss.universitycms.dto.StudentDTO;
 import dev.alexcoss.universitycms.model.Student;
 import dev.alexcoss.universitycms.repository.StudentRepository;
 import dev.alexcoss.universitycms.service.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.service.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.service.exception.NullEntityListException;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = {StudentService.class, ModelMapper.class})
-class StudentServiceTest {
+@SpringBootTest(classes = {StudentServiceImpl.class, ModelMapper.class})
+class StudentServiceImplTest {
     @MockBean
     private StudentRepository studentRepository;
 
     @Autowired
-    private StudentService studentService;
+    private StudentServiceImpl studentService;
 
 
     @Test
     public void shouldAddStudents() {
         List<StudentDTO> studentList = getSampleStudentDtoList();
-        studentService.addStudents(studentList);
+        studentService.saveStudents(studentList);
 
         verify(studentRepository, times(1)).saveAllAndFlush(anyList());
     }
 
     @Test
     public void shouldNotAddStudentsWhenListIsNull() {
-        studentService.addStudents(null);
+        assertThrows(NullEntityListException.class, () -> studentService.saveStudents(null));
 
         verify(studentRepository, never()).saveAllAndFlush(anyList());
     }
 
     @Test
     public void shouldNotAddStudentsWhenListIsEmpty() {
-        studentService.addStudents(Collections.emptyList());
+        assertThrows(NullEntityListException.class, () -> studentService.saveStudents(Collections.emptyList()));
 
         verify(studentRepository, never()).saveAllAndFlush(anyList());
     }
@@ -52,7 +51,8 @@ class StudentServiceTest {
     @Test
     public void shouldNotAddStudentsWhenListContainsInvalidStudent() {
         List<StudentDTO> studentListWithInvalid = Arrays.asList(new StudentDTO(), null);
-        studentService.addStudents(studentListWithInvalid);
+
+        assertThrows(IllegalEntityException.class, () -> studentService.saveStudents(studentListWithInvalid));
 
         verify(studentRepository, never()).saveAllAndFlush(anyList());
     }
@@ -66,7 +66,7 @@ class StudentServiceTest {
             .username("user")
             .password("pass")
             .build();
-        studentService.addStudent(validStudent);
+        studentService.saveStudent(validStudent);
 
         verify(studentRepository, times(1)).save(any(Student.class));
     }
@@ -74,7 +74,8 @@ class StudentServiceTest {
     @Test
     public void shouldNotAddInvalidStudent() {
         StudentDTO invalidStudent = new StudentDTO();
-        studentService.addStudent(invalidStudent);
+
+        assertThrows(IllegalEntityException.class, () -> studentService.saveStudent(invalidStudent));
 
         verify(studentRepository, never()).save(any());
     }
@@ -84,7 +85,7 @@ class StudentServiceTest {
         long existingStudentId = 1;
         when(studentRepository.findById(existingStudentId)).thenReturn(Optional.of(new Student()));
 
-        studentService.removeStudentById(existingStudentId);
+        studentService.deleteStudentById(existingStudentId);
 
         verify(studentRepository, times(1)).deleteById(existingStudentId);
     }
@@ -94,7 +95,7 @@ class StudentServiceTest {
         long nonExistingStudentId = 99;
         when(studentRepository.findById(nonExistingStudentId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotExistException.class, () -> studentService.removeStudentById(nonExistingStudentId));
+        assertThrows(EntityNotExistException.class, () -> studentService.deleteStudentById(nonExistingStudentId));
         verify(studentRepository, never()).deleteById(nonExistingStudentId);
     }
 

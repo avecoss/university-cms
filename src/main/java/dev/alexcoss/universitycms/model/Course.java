@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,8 +23,8 @@ public class Course {
     private int id;
 
     @Column(name = "course_name")
-    @NotEmpty(message = "Course name should not be empty")
-    @Size(min = 2, max = 100, message = "Course name should be between 2 and 100 characters")
+    @NotEmpty(message = "{course.validation.not_empty}")
+    @Size(min = 2, max = 100, message = "{course.validation.size}")
     private String name;
 
     @ManyToOne
@@ -36,7 +37,7 @@ public class Course {
         joinColumns = @JoinColumn(name = "course_id"),
         inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     public void addStudentToCourse(Student student) {
         students.add(student);
