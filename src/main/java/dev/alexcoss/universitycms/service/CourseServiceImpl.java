@@ -1,6 +1,7 @@
 package dev.alexcoss.universitycms.service;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
+import dev.alexcoss.universitycms.dto.TeacherDTO;
 import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.CourseRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -46,9 +48,13 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
     }
 
     @Override
-    public Optional<CourseDTO> findCourseById(Integer id) {
-        return repository.findById(id)
-            .map(course -> modelMapper.map(course, CourseDTO.class));
+    public CourseDTO findCourseById(Integer id, Locale locale) {
+        return getCourseDTO(id, locale);
+    }
+
+    @Override
+    public CourseDTO findCourseById(Integer id) {
+        return getCourseDTO(id, LocaleContextHolder.getLocale());
     }
 
     @Transactional
@@ -113,5 +119,12 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
             throw new IllegalEntityException(messageSource.getMessage("course.errors.invalid", new Object[0],
                 "Invalid course data", LocaleContextHolder.getLocale()));
         }
+    }
+
+    private CourseDTO getCourseDTO(Integer id, Locale locale) {
+        return repository.findById(id)
+            .map(course -> modelMapper.map(course, CourseDTO.class))
+            .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("course.errors.not_found",
+                new Object[]{id}, "Course with ID {0} not found!", locale)));
     }
 }

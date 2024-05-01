@@ -3,7 +3,7 @@ package dev.alexcoss.universitycms.controller.course;
 import dev.alexcoss.universitycms.dto.CourseDTO;
 import dev.alexcoss.universitycms.dto.TeacherDTO;
 import dev.alexcoss.universitycms.service.CourseService;
-import dev.alexcoss.universitycms.service.TeacherService;
+import dev.alexcoss.universitycms.service.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ class CourseControllerTest {
     private CourseService<CourseDTO> courseService;
 
     @MockBean
-    private TeacherService teacherService;
+    private TeacherServiceImpl teacherService;
 
     @Test
     public void testCourseDetails() throws Exception {

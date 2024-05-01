@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>[[${student.getFirstName()+' '+student.getLastName()}]]</title>
+    <title>[[${teacher.getFirstName()+' '+teacher.getLastName()}]]</title>
     <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,28 +18,28 @@
 <section class="title">
     <div class="background_title">
         <div class="container">
-            <h2 class="text-center">Student</h2>
+            <h2 class="text-center">Professor</h2>
         </div>
     </div>
 </section>
 
-<section class="student_details">
+<section class="teacher_details">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 th:text="${student.getFirstName()+' '+student.getLastName()}"></h2>
+                <h2 th:text="${teacher.getFirstName()+' '+teacher.getLastName()}"></h2>
                 <br>
 
-                <div class="list-group">
-                    <a th:href="@{/groups/{id}(id=${student.getGroup().getId()})}"
+                <div class="list-group" th:each="course : ${teacher.getCourses()}">
+                    <a th:href="@{/courses/{id}(id=${course.getId()})}"
                        class="list-group-item list-group-item-action"
-                       th:text="${'Group: ' + student.getGroup().getName()}"></a>
+                       th:text="${'Course: ' + course.getName()}"></a>
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a th:href="@{/students/{id}/edit(id=${student.getId()})}" class="btn btn-secondary me-2">Edit Student</a>
-                    <form th:method="DELETE" th:action="@{/students/{id}(id=${student.getId()})}">
-                        <button type="submit" class="btn btn-danger">Delete Student</button>
+                    <a th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary me-2">Edit Teacher</a>
+                    <form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
+                        <button type="submit" class="btn btn-danger">Delete Teacher</button>
                     </form>
                 </div>
             </div>

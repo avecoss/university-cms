@@ -13,5 +13,5 @@ import java.util.List;
 @SuperBuilder
 public class TeacherDTO extends PersonDTO {
     private long id;
-    private List<CourseDTO> courses;
+    private List<Integer> courseIds;
 }

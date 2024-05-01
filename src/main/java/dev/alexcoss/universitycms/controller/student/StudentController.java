@@ -52,9 +52,11 @@ public class StudentController {
 
     @PatchMapping
     public String updateStudent(@ModelAttribute("student") @Valid StudentDTO student, BindingResult bindingResult,
-                               @PathVariable long id, @RequestParam Integer groupId, Locale locale) {
-        if (bindingResult.hasErrors())
+                               @PathVariable long id, @RequestParam Integer groupId, Locale locale, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("groups", groupService.findAllGroups());
             return "students/s_edit";
+        }
 
         if (groupId != null) {
             student.setGroup(groupService.findGroupById(groupId)

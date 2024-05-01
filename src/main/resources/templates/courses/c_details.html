@@ -34,7 +34,7 @@
                 </p>
 
                 <div class="list-group">
-                    <a th:href="@{/teacher/{id}(id=${course.getTeacher().getId()})}"
+                    <a th:href="@{/teachers/{id}(id=${course.getTeacher().getId()})}"
                        class="list-group-item list-group-item-action"
                        th:text="${'Teacher: ' + course.getTeacher().getFirstName() + ' ' + course.getTeacher().getLastName()}"></a>
                 </div>

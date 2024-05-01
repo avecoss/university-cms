@@ -45,9 +45,11 @@ public class StudentsController {
 
     @PostMapping()
     public String createStudent(@ModelAttribute("student") @Valid StudentDTO student, BindingResult bindingResult,
-                               @RequestParam Integer groupId, Locale locale) {
-        if (bindingResult.hasErrors())
+                               @RequestParam Integer groupId, Locale locale, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("groups", groupService.findAllGroups());
             return "students/s_new";
+        }
 
         if (groupId != null) {
             student.setGroup(groupService.findGroupById(groupId)

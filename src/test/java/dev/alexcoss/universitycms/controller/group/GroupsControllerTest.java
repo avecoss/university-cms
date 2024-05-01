@@ -1,12 +1,8 @@
 package dev.alexcoss.universitycms.controller.group;
 
-import dev.alexcoss.universitycms.dto.CourseDTO;
 import dev.alexcoss.universitycms.dto.GroupDTO;
 import dev.alexcoss.universitycms.dto.StudentDTO;
-import dev.alexcoss.universitycms.dto.TeacherDTO;
-import dev.alexcoss.universitycms.service.CourseService;
 import dev.alexcoss.universitycms.service.GroupService;
-import dev.alexcoss.universitycms.service.TeacherService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

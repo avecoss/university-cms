@@ -1,6 +1,7 @@
 package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
+import dev.alexcoss.universitycms.dto.TeacherDTO;
 import dev.alexcoss.universitycms.service.CourseService;
 import dev.alexcoss.universitycms.service.TeacherService;
 import dev.alexcoss.universitycms.service.exception.EntityNotExistException;
@@ -21,7 +22,7 @@ import java.util.Locale;
 public class CoursesController {
 
     private final CourseService<CourseDTO> courseService;
-    private final TeacherService teacherService;
+    private final TeacherService<TeacherDTO> teacherService;
 
     private final MessageSource messageSource;
 
@@ -38,18 +39,20 @@ public class CoursesController {
     @GetMapping("/new")
     public String newCourse(Model model) {
         model.addAttribute("course", new CourseDTO());
-        model.addAttribute("teachers", teacherService.getTeachers());
+        model.addAttribute("teachers", teacherService.findAllTeachers());
         return "courses/c_new";
     }
 
     @PostMapping()
     public String createCourse(@ModelAttribute("course") @Valid CourseDTO course, BindingResult bindingResult,
-                               @RequestParam Integer teacherId, Locale locale) {
-        if (bindingResult.hasErrors())
+                               @RequestParam Long teacherId, Locale locale, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("teachers", teacherService.findAllTeachers());
             return "courses/c_new";
+        }
 
         if (teacherId != null) {
-            course.setTeacher(teacherService.getTeacherById(teacherId)
+            course.setTeacher(teacherService.findTeacherById(teacherId)
                 .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("teacher.errors.not_found",
                     new Object[]{teacherId}, "Teacher with ID {0} not found!", locale))));
         } else {
