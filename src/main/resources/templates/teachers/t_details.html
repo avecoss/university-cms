@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>[[${teacher.getFirstName()+' '+teacher.getLastName()}]]</title>
+    <title>[[${teacherView.getFirstName()+' '+teacherView.getLastName()}]]</title>
     <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,18 +27,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 th:text="${teacher.getFirstName()+' '+teacher.getLastName()}"></h2>
+                <h2 th:text="${teacherView.getFirstName()+' '+teacherView.getLastName()}"></h2>
                 <br>
 
-                <div class="list-group" th:each="course : ${teacher.getCourses()}">
+                <div class="list-group mb-2" th:each="course : ${teacherView.getCourses()}">
                     <a th:href="@{/courses/{id}(id=${course.getId()})}"
                        class="list-group-item list-group-item-action"
                        th:text="${'Course: ' + course.getName()}"></a>
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary me-2">Edit Teacher</a>
-                    <form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
+                    <a th:href="@{/teachers/{id}/edit(id=${teacherView.getId()})}" class="btn btn-secondary me-2">Edit Teacher</a>
+                    <form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacherView.getId()})}">
                         <button type="submit" class="btn btn-danger">Delete Teacher</button>
                     </form>
                 </div>

@@ -1,8 +1,8 @@
-package dev.alexcoss.universitycms.controller.advice;
+package dev.alexcoss.universitycms.controller.handler;
 
-import dev.alexcoss.universitycms.service.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.service.exception.NullEntityListException;
+import dev.alexcoss.universitycms.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.exception.NullEntityListException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

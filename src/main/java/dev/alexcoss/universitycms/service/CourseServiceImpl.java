@@ -1,13 +1,12 @@
 package dev.alexcoss.universitycms.service;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.TeacherDTO;
 import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.CourseRepository;
-import dev.alexcoss.universitycms.service.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.service.exception.NullEntityListException;
+import dev.alexcoss.universitycms.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.exception.NullEntityListException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +55,15 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
         return getCourseDTO(id, LocaleContextHolder.getLocale());
     }
 
+    @Override
+    public List<CourseDTO> findAllByIds(Iterable<Integer> ids) {
+        List<Course> coursesByIds = repository.findAllById(ids);
+
+        return coursesByIds.stream()
+            .map(course -> modelMapper.map(course, CourseDTO.class))
+            .toList();
+    }
+
     @Transactional
     @Override
     public void saveCourses(List<CourseDTO> courseList) {
@@ -67,7 +74,6 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
             .toList();
 
         repository.saveAllAndFlush(courses);
-
     }
 
     @Transactional

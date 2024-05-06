@@ -17,6 +17,9 @@ spring:
         baselineOnMigrate: true
         baselineVersion: 1
         baselineDescription: Base migration
+        schemas:
+            - public
+            - university
 
     jpa:
         show-sql: true

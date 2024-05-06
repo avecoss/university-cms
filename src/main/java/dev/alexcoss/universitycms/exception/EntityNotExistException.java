@@ -1,4 +1,4 @@
-package dev.alexcoss.universitycms.service.exception;
+package dev.alexcoss.universitycms.exception;
 
 public class EntityNotExistException extends RuntimeException{
     public EntityNotExistException(String message) {

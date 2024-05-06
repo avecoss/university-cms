@@ -1,5 +1,6 @@
 package dev.alexcoss.universitycms.dto;
 
+import dev.alexcoss.universitycms.dto.users.TeacherDTO;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;

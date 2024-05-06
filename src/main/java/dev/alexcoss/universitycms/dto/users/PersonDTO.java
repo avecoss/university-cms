@@ -1,5 +1,6 @@
-package dev.alexcoss.universitycms.dto;
+package dev.alexcoss.universitycms.dto.users;
 
+import dev.alexcoss.universitycms.enumerated.Role;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -8,9 +9,10 @@ import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(of = "username")
 @SuperBuilder
 public abstract class PersonDTO {
+
+    private long id;
 
     @NotEmpty(message = "{person.validation.not_empty_firstname}")
     @Size(min = 2, max = 50, message = "{person.validation.size_firstname}")
@@ -20,11 +22,5 @@ public abstract class PersonDTO {
     @Size(min = 2, max = 50, message = "{person.validation.size_lastname}")
     private String lastName;
 
-    @NotEmpty(message = "{person.validation.not_empty_username}")
-    @Size(min = 2, max = 30, message = "{person.validation.size_username}")
-    private String username;
-
-    @NotEmpty(message = "{person.validation.not_empty_pass}")
-    @Size(min = 8, max = 100, message = "{person.validation.size_pass}")
-    private String password;
+    private Role role;
 }

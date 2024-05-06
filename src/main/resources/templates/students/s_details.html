@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>[[${student.getFirstName()+' '+student.getLastName()}]]</title>
+    <title>[[${studentView.getFirstName()+' '+studentView.getLastName()}]]</title>
     <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,18 +27,28 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 th:text="${student.getFirstName()+' '+student.getLastName()}"></h2>
+                <h2 th:text="${studentView.getFirstName()+' '+studentView.getLastName()}"></h2>
                 <br>
 
-                <div class="list-group">
-                    <a th:href="@{/groups/{id}(id=${student.getGroup().getId()})}"
+                <h4 class="mb-2">Group:</h4>
+
+                <div class="list-group mb-2">
+                    <a th:href="@{/groups/{id}(id=${studentView.getGroup().getId()})}"
                        class="list-group-item list-group-item-action"
-                       th:text="${'Group: ' + student.getGroup().getName()}"></a>
+                       th:text="${'Group: ' + studentView.getGroup().getName()}"></a>
+                </div>
+
+                <h4 class="mb-2">Courses:</h4>
+
+                <div class="list-group mb-2" th:each="course : ${studentView.getCourses()}">
+                    <a th:href="@{/courses/{id}(id=${course.getId()})}"
+                       class="list-group-item list-group-item-action"
+                       th:text="${'Courses: ' + course.getName()}"></a>
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a th:href="@{/students/{id}/edit(id=${student.getId()})}" class="btn btn-secondary me-2">Edit Student</a>
-                    <form th:method="DELETE" th:action="@{/students/{id}(id=${student.getId()})}">
+                    <a th:href="@{/students/{id}/edit(id=${studentView.getId()})}" class="btn btn-secondary me-2">Edit Student</a>
+                    <form th:method="DELETE" th:action="@{/students/{id}(id=${studentView.getId()})}">
                         <button type="submit" class="btn btn-danger">Delete Student</button>
                     </form>
                 </div>

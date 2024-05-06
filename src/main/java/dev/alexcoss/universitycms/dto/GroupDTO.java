@@ -1,5 +1,6 @@
 package dev.alexcoss.universitycms.dto;
 
+import dev.alexcoss.universitycms.dto.users.StudentViewDTO;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,5 @@ public class GroupDTO {
     @Pattern(regexp = "^[A-Z]{2}-\\d{2,3}$", message = "{course.validation.pattern}")
     private String name;
 
-    private List<StudentDTO> students;
+    private List<StudentViewDTO> students;
 }

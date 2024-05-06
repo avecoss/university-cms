@@ -1,7 +1,8 @@
 package dev.alexcoss.universitycms.controller.teacher;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.TeacherDTO;
+import dev.alexcoss.universitycms.dto.users.TeacherCreateEditDTO;
+import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
 import dev.alexcoss.universitycms.service.CourseService;
 import dev.alexcoss.universitycms.service.TeacherService;
 import jakarta.validation.Valid;
@@ -19,28 +20,29 @@ import java.util.Locale;
 @RequestMapping("/teachers")
 public class TeachersController {
 
-    private final TeacherService<TeacherDTO> teacherService;
+    private final TeacherService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
     private final CourseService<CourseDTO> courseService;
 
     @GetMapping
     public String teachers(Model model, @RequestParam(value = "search_query", required = false) String searchQuery) {
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            model.addAttribute("teachers", teacherService.findTeachersByFirstName(searchQuery));
+            model.addAttribute("teachersView", teacherService.findTeachersByFirstName(searchQuery));
         } else {
-            model.addAttribute("teachers", teacherService.findAllTeachers());
+            model.addAttribute("teachersView", teacherService.findAllTeachers());
         }
         return "teachers/t_list";
     }
 
     @GetMapping("/new")
     public String newTeacher(Model model) {
-        model.addAttribute("teacher", new TeacherDTO());
+        model.addAttribute("teacherView", new TeacherViewDTO());
+        model.addAttribute("teacherCreate", new TeacherCreateEditDTO());
         model.addAttribute("courses", courseService.findAllCourses());
         return "teachers/t_new";
     }
 
     @PostMapping()
-    public String createTeacher(@ModelAttribute("teacher") @Valid TeacherDTO teacher, BindingResult bindingResult,
+    public String createTeacher(@ModelAttribute("teacherCreate") @Valid TeacherCreateEditDTO teacher, BindingResult bindingResult,
                                 @RequestParam(value = "courseIds", required = false) List<Integer> courseIds, Model model, Locale locale) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("courses", courseService.findAllCourses());

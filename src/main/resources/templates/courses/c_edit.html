@@ -40,7 +40,8 @@
                     <div class="mb-3">
                         <label for="teacher" class="form-label">Teacher:</label>
                         <select class="form-select" id="teacher" name="teacherId">
-                            <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.getFirstName()+' '+teacher.getLastName()}"></option>
+                            <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.getFirstName()+' '+teacher.getLastName()}"
+                                    th:selected="${teacher.id == course.teacher.id}"></option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Edite</button>

@@ -3,7 +3,6 @@ course:
         not_found: "Course with ID {0} not found!"
         invalid: "Invalid course data"
         empty_list: "Course list is null or empty"
-        invalid_teacher_id: "Teacher ID is null"
     validation:
         not_empty: "Course name should not be empty"
         size: "Course name should be between {0} and {1} characters"
@@ -28,7 +27,6 @@ student:
         not_found: "Student with ID {0} not found!"
         invalid: "Invalid student data"
         empty_list: "Student list is null or empty"
-        invalid_group_id: "Group ID is null"
 
 person:
     validation:

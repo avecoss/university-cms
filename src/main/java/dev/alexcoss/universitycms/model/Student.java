@@ -24,6 +24,31 @@ public class Student extends Person {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany
+    @JoinTable(
+        name = "student_course", schema = "university",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     private Set<Course> courses = new HashSet<>();
+
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.getStudents().remove(this);
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+        group.getStudents().add(this);
+    }
+
+    public void removeGroup(Group group) {
+        this.group = null;
+        group.getStudents().remove(this);
+    }
 }

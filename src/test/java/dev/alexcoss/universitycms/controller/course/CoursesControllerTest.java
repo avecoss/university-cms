@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.TeacherDTO;
+import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
 import dev.alexcoss.universitycms.service.CourseService;
 import dev.alexcoss.universitycms.service.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -38,8 +37,8 @@ class CoursesControllerTest {
     @Test
     public void testCourses() throws Exception {
         List<CourseDTO> courses = new ArrayList<>();
-        courses.add(new CourseDTO(1, "Mathematics", new TeacherDTO()));
-        courses.add(new CourseDTO(2, "Physics", new TeacherDTO()));
+        courses.add(new CourseDTO(1, "Mathematics", new TeacherViewDTO()));
+        courses.add(new CourseDTO(2, "Physics", new TeacherViewDTO()));
 
         when(courseService.findAllCourses()).thenReturn(courses);
 
@@ -51,9 +50,11 @@ class CoursesControllerTest {
 
     @Test
     public void testNewCourse() throws Exception {
-        List<TeacherDTO> teachers = new ArrayList<>();
-        teachers.add(new TeacherDTO());
-        teachers.add(new TeacherDTO());
+        List<TeacherViewDTO> teachers = new ArrayList<>();
+        teachers.add(new TeacherViewDTO());
+        teachers.add(new TeacherViewDTO());
+
+        when(teacherService.findAllTeachers()).thenReturn(teachers);
 
         mockMvc.perform(get("/courses/new"))
             .andExpect(status().isOk())
@@ -64,9 +65,9 @@ class CoursesControllerTest {
 
     @Test
     public void testCreateCourse() throws Exception {
-        CourseDTO courseDTO = new CourseDTO(1, "Mathematics", new TeacherDTO());
+        CourseDTO courseDTO = new CourseDTO(1, "Mathematics", new TeacherViewDTO());
 
-        when(teacherService.getTeacherById(1)).thenReturn(Optional.of(new TeacherDTO()));
+        when(teacherService.findTeacherById(1L)).thenReturn(new TeacherViewDTO());
 
         mockMvc.perform(post("/courses")
                 .param("teacherId", "1")
@@ -77,4 +78,17 @@ class CoursesControllerTest {
         verify(courseService, times(1)).saveCourse(any(CourseDTO.class));
     }
 
+    @Test
+    public void testCreateCourseValidationFailure() throws Exception {
+        CourseDTO invalidCourseDTO = new CourseDTO(1, "", new TeacherViewDTO());
+
+        mockMvc.perform(post("/courses")
+                .param("teacherId", "1")
+                .param("name", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name("courses/c_new"))
+            .andExpect(model().attributeExists("course"))
+            .andExpect(model().attribute("teachers", teacherService.findAllTeachers()))
+            .andExpect(model().hasErrors());
+    }
 }

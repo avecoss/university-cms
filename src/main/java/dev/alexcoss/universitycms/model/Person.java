@@ -1,6 +1,9 @@
 package dev.alexcoss.universitycms.model;
 
+import dev.alexcoss.universitycms.enumerated.Role;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -21,12 +24,16 @@ public abstract class Person {
     private String lastName;
 
     @NotEmpty(message = "{person.validation.not_empty_username}")
-    @Size(min = 2, max = 30, message = "{person.validation.size_username}")
-    @Column(name = "username")
+    @Size(min = 2, max = 100, message = "{person.validation.size_username}")
+    @Column(name = "username", unique = true)
     private String username;
 
     @NotEmpty(message = "{person.validation.not_empty_pass}")
     @Size(min = 8, max = 100, message = "{person.validation.size_pass}")
     @Column(name = "password")
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "u_role")
+    private Role role;
 }

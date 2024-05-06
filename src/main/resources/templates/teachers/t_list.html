@@ -37,14 +37,14 @@
             </div>
         </div>
 
-        <div class="row" th:if="${#lists.isEmpty(teachers)}">
+        <div class="row" th:if="${#lists.isEmpty(teachersView)}">
             <div class="col-md-12">
                 <p>Nothing found</p>
             </div>
         </div>
 
-        <div class="row" th:if="${not #lists.isEmpty(teachers)}">
-            <div th:each="teacher : ${teachers}" class="col-md-4">
+        <div class="row" th:if="${not #lists.isEmpty(teachersView)}">
+            <div th:each="teacher : ${teachersView}" class="col-md-4">
                 <div class="card mb-4 shadow rounded">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${teacher.getFirstName()+' '+teacher.getLastName()}"></h5>

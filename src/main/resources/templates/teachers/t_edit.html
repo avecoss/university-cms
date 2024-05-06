@@ -31,7 +31,7 @@
                 <h5 class="card-title">Edite Professor</h5>
             </div>
             <div class="card-body">
-                <form th:method="PATCH" th:action="@{/teachers/{id}(id=${teacher.getId()})}" th:object="${teacher}">
+                <form th:method="PATCH" th:action="@{/teachers/{id}(id=${teacherView.getId()})}" th:object="${teacherView}">
                     <div class="mb-3">
                         <label for="firstName" class="form-label">Professor First Name:</label>
                         <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter professor's first name"/>
@@ -46,8 +46,9 @@
                     <div class="mb-3">
                         <label>Choose Courses:</label>
                         <div class="form-check" th:each="course : ${courses}">
+                            <input class="form-check-input" type="checkbox" th:id="'course_' + ${course.id}" th:value="${course.id}"
+                                   th:checked="${teacherEdit.courseIds != null and teacherEdit.courseIds.contains(course.id)}" name="courseIds"/>
                             <label class="form-check-label" th:for="'course_' + ${course.id}" th:text="${course.name}"></label>
-                            <input class="form-check-input" type="checkbox" th:id="'course_' + ${course.id}" th:value="${course.id}" th:field="*{courses}"/>
                         </div>
                     </div>
 

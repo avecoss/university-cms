@@ -1,11 +1,11 @@
 package dev.alexcoss.universitycms.service;
 
 import dev.alexcoss.universitycms.dto.GroupDTO;
+import dev.alexcoss.universitycms.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.exception.NullEntityListException;
 import dev.alexcoss.universitycms.model.Group;
 import dev.alexcoss.universitycms.repository.GroupRepository;
-import dev.alexcoss.universitycms.service.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.service.exception.NullEntityListException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +43,11 @@ public class GroupServiceImpl implements GroupService<GroupDTO> {
     }
 
     @Override
-    public Optional<GroupDTO> findGroupById(Integer id) {
+    public GroupDTO findGroupById(Integer id) {
         return repository.findById(id)
-            .map(group -> modelMapper.map(group, GroupDTO.class));
+            .map(group -> modelMapper.map(group, GroupDTO.class))
+            .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",
+                new Object[]{id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
     }
 
     @Transactional
@@ -79,7 +80,7 @@ public class GroupServiceImpl implements GroupService<GroupDTO> {
                 return repository.save(group);
             })
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",
-                new Object[] {id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
+                new Object[]{id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
     }
 
     @Transactional
@@ -87,7 +88,7 @@ public class GroupServiceImpl implements GroupService<GroupDTO> {
     public void deleteGroupById(Integer id) {
         repository.findById(id)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",
-                new Object[] {id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
+                new Object[]{id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
 
         repository.deleteById(id);
     }

@@ -31,20 +31,15 @@ public class Course {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToMany
-    @JoinTable(
-        name = "student_course",
-        joinColumns = @JoinColumn(name = "course_id"),
-        inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
+    @ManyToMany(mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
 
-    public void addStudentToCourse(Student student) {
+    public void addStudent(Student student) {
         students.add(student);
         student.getCourses().add(this);
     }
 
-    public void removeStudentFromCourse(Student student) {
+    public void removeStudent(Student student) {
         students.remove(student);
         student.getCourses().remove(this);
     }

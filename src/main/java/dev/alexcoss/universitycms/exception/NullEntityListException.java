@@ -1,4 +1,4 @@
-package dev.alexcoss.universitycms.service.exception;
+package dev.alexcoss.universitycms.exception;
 
 public class NullEntityListException extends RuntimeException {
     public NullEntityListException(String message) {

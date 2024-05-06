@@ -1,7 +1,8 @@
 package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.GroupDTO;
-import dev.alexcoss.universitycms.dto.StudentDTO;
+import dev.alexcoss.universitycms.dto.users.StudentDTO;
+import dev.alexcoss.universitycms.dto.users.StudentViewDTO;
 import dev.alexcoss.universitycms.service.GroupService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +34,8 @@ class GroupsControllerTest {
 
     @Test
     public void testGroups() throws Exception {
-        List<StudentDTO> studentsForGroup = new ArrayList<>();
-        studentsForGroup.add(new StudentDTO());
+        List<StudentViewDTO> studentsForGroup = new ArrayList<>();
+        studentsForGroup.add(new StudentViewDTO());
 
         List<GroupDTO> groups = new ArrayList<>();
         groups.add(new GroupDTO(1, "AA-123", studentsForGroup));
