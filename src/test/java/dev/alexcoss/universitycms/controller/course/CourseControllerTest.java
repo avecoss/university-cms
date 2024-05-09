@@ -2,7 +2,7 @@ package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.CourseDTO;
 import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
-import dev.alexcoss.universitycms.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.service.CourseService;
 import dev.alexcoss.universitycms.service.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
