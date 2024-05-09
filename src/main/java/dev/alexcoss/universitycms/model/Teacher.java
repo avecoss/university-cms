@@ -3,13 +3,14 @@ package dev.alexcoss.universitycms.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "courses")
+@ToString(callSuper = true, exclude = "courses")
 @Entity
 @Table(name = "teacher", schema = "university")
 public class Teacher extends Person {
@@ -20,7 +21,7 @@ public class Teacher extends Person {
     private long id;
 
     @OneToMany(mappedBy = "teacher", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private List<Course> courses;
+    private Set<Course> courses = new HashSet<>();
 
     public void addCourse(Course course) {
         courses.add(course);

@@ -17,6 +17,9 @@ spring:
         baselineOnMigrate: true
         baselineVersion: 1
         baselineDescription: Base migration
+        schemas:
+            - public
+            - university
 
     jpa:
         show-sql: true
@@ -27,3 +30,9 @@ spring:
                     batch_size: 10
                 order_updates: true
                 order_inserts: true
+    mvc:
+        hiddenmethod:
+            filter:
+                enabled: true
+
+

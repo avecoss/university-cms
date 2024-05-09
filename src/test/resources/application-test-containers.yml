@@ -1,0 +1,13 @@
+spring:
+    datasource:
+        url: jdbc:tc:postgresql:latest:///test_database
+        username: user
+        password: password
+
+    flyway:
+        enabled: false
+
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect

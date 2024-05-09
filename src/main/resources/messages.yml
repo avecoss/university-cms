@@ -1,0 +1,50 @@
+course:
+    errors:
+        not_found: "Course with ID {0} not found!"
+        invalid: "Invalid course data"
+        empty_list: "Course list is null or empty"
+    validation:
+        not_empty: "Course name should not be empty"
+        size: "Course name should be between {0} and {1} characters"
+
+group:
+    errors:
+        not_found: "Group with ID {0} not found!"
+        invalid: "Invalid group data"
+        empty_list: "Group list is null or empty"
+    validation:
+        not_empty: "Group name should not be empty"
+        pattern: "Name should be in the format AA-12 or ZZ-123"
+
+teacher:
+    errors:
+        not_found: "Teacher with ID {0} not found!"
+        invalid: "Invalid teacher data"
+        empty_list: "Teacher list is null or empty"
+
+student:
+    errors:
+        not_found: "Student with ID {0} not found!"
+        invalid: "Invalid student data"
+        empty_list: "Student list is null or empty"
+
+person:
+    validation:
+        not_empty_firstname: "First name should not be empty"
+        not_empty_lastname: "Last name should not be empty"
+        not_empty_username: "Username should not be empty"
+        not_empty_pass: "Password should not be empty"
+        size_firstname: "First name should be between {0} and {1} characters"
+        size_lastname: "Last name should be between {0} and {1} characters"
+        size_username: "Username should be between {0} and {1} characters"
+        size_pass: "Password should be between {0} and {1} characters"
+
+
+
+errors:
+    404:
+        title: "Not Found"
+        header: "Error 404: not found"
+    400:
+        title: "Validation error"
+        header: "Error 400: validation error"
