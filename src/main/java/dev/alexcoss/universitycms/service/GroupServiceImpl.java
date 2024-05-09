@@ -1,9 +1,9 @@
 package dev.alexcoss.universitycms.service;
 
 import dev.alexcoss.universitycms.dto.GroupDTO;
-import dev.alexcoss.universitycms.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.exception.NullEntityListException;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.util.exception.NullEntityListException;
 import dev.alexcoss.universitycms.model.Group;
 import dev.alexcoss.universitycms.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;

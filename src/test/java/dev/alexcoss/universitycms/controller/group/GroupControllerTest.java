@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.GroupDTO;
-import dev.alexcoss.universitycms.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.service.GroupService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

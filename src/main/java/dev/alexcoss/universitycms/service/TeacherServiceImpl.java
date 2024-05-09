@@ -2,9 +2,9 @@ package dev.alexcoss.universitycms.service;
 
 import dev.alexcoss.universitycms.dto.users.TeacherCreateEditDTO;
 import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
-import dev.alexcoss.universitycms.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.exception.NullEntityListException;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.util.exception.NullEntityListException;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
