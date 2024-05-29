@@ -1,12 +1,15 @@
 package dev.alexcoss.universitycms.service;
 
-import dev.alexcoss.universitycms.dto.users.StudentEditCreateDTO;
-import dev.alexcoss.universitycms.dto.users.StudentViewDTO;
+import dev.alexcoss.universitycms.dto.view.users.StudentEditCreateDTO;
+import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
 import dev.alexcoss.universitycms.enumerated.Role;
 import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Group;
 import dev.alexcoss.universitycms.model.Student;
 import dev.alexcoss.universitycms.repository.StudentRepository;
+import dev.alexcoss.universitycms.service.generator.LoginPasswordGenerator;
+import dev.alexcoss.universitycms.service.generator.PersonBuilder;
+import dev.alexcoss.universitycms.service.student.StudentServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import dev.alexcoss.universitycms.util.exception.NullEntityListException;
@@ -32,37 +35,6 @@ class StudentServiceImplTest {
 
     @Autowired
     private StudentServiceImpl studentService;
-
-    @Test
-    public void shouldSaveStudents() {
-        List<StudentEditCreateDTO> studentList = getSampleStudentDtoList();
-        studentService.saveStudents(studentList);
-
-        verify(studentRepository, times(1)).saveAllAndFlush(anyList());
-    }
-
-    @Test
-    public void shouldNotSaveStudentsWhenListIsNull() {
-        assertThrows(NullEntityListException.class, () -> studentService.saveStudents(null));
-
-        verify(studentRepository, never()).saveAllAndFlush(anyList());
-    }
-
-    @Test
-    public void shouldNotSaveStudentsWhenListIsEmpty() {
-        assertThrows(NullEntityListException.class, () -> studentService.saveStudents(Collections.emptyList()));
-
-        verify(studentRepository, never()).saveAllAndFlush(anyList());
-    }
-
-    @Test
-    public void shouldNotSaveStudentsWhenListContainsInvalidStudent() {
-        List<StudentEditCreateDTO> studentListWithInvalid = Arrays.asList(new StudentEditCreateDTO(), null);
-
-        assertThrows(IllegalEntityException.class, () -> studentService.saveStudents(studentListWithInvalid));
-
-        verify(studentRepository, never()).saveAllAndFlush(anyList());
-    }
 
     @Test
     public void shouldSaveValidStudent() {

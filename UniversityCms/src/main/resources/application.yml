@@ -10,9 +10,6 @@ spring:
 
 
     flyway:
-        url: jdbc:postgresql://localhost:5433/university_db
-        user: adminer
-        password: 1111
         locations: db/migration
         baselineOnMigrate: true
         baselineVersion: 1
@@ -35,4 +32,8 @@ spring:
             filter:
                 enabled: true
 
+university-cms:
+    service:
+        data-generator:
+            url: http://localhost:8085
 

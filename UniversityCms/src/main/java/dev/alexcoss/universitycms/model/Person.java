@@ -7,9 +7,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @MappedSuperclass
 public abstract class Person {
 

@@ -31,7 +31,7 @@ public class Course {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Student> students = new HashSet<>();
 
     public void addStudent(Student student) {
@@ -42,5 +42,15 @@ public class Course {
     public void removeStudent(Student student) {
         students.remove(student);
         student.getCourses().remove(this);
+    }
+
+    public void addTeacher(Teacher teacher) {
+        this.teacher = teacher;
+        teacher.getCourses().add(this);
+    }
+
+    public void removeTeacher(Teacher teacher) {
+        this.teacher = null;
+        teacher.getCourses().remove(this);
     }
 }

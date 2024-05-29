@@ -1,10 +1,10 @@
 package dev.alexcoss.universitycms.controller.course;
 
-import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.users.TeacherCreateEditDTO;
-import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
-import dev.alexcoss.universitycms.service.CourseService;
-import dev.alexcoss.universitycms.service.TeacherService;
+import dev.alexcoss.universitycms.dto.view.CourseDTO;
+import dev.alexcoss.universitycms.dto.view.users.TeacherCreateEditDTO;
+import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.service.course.CourseProcessingService;
+import dev.alexcoss.universitycms.service.teacher.TeacherProcessingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/courses")
 public class CoursesController {
 
-    private final CourseService<CourseDTO> courseService;
-    private final TeacherService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
+    private final CourseProcessingService<CourseDTO> courseService;
+    private final TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
 
     @GetMapping
     public String courses(Model model, @RequestParam(value = "search_query", required = false) String searchQuery) {

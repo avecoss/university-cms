@@ -2,6 +2,7 @@ package dev.alexcoss.universitycms.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "courses", callSuper = true)
 @ToString(exclude = "courses", callSuper = true)
+@SuperBuilder
 @Entity
 @Table(name = "student", schema = "university")
 public class Student extends Person {
@@ -24,6 +26,7 @@ public class Student extends Person {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
         name = "student_course", schema = "university",

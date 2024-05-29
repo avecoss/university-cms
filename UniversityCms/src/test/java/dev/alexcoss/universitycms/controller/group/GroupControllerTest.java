@@ -1,8 +1,8 @@
 package dev.alexcoss.universitycms.controller.group;
 
-import dev.alexcoss.universitycms.dto.GroupDTO;
+import dev.alexcoss.universitycms.dto.view.GroupDTO;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.GroupService;
+import dev.alexcoss.universitycms.service.group.GroupProcessingService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class GroupControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GroupService<GroupDTO> groupService;
+    private GroupProcessingService<GroupDTO> groupService;
 
 
     @Test

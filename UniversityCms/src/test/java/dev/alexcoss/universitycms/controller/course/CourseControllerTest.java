@@ -1,10 +1,10 @@
 package dev.alexcoss.universitycms.controller.course;
 
-import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.dto.view.CourseDTO;
+import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.service.course.CourseProcessingService;
+import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.CourseService;
-import dev.alexcoss.universitycms.service.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +21,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CourseController.class)
-class CourseControllerTest { //TODO comments
+class CourseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CourseService<CourseDTO> courseService;
+    private CourseProcessingService<CourseDTO> courseService;
 
     @MockBean
     private TeacherServiceImpl teacherService;
 
-/*    @Test
+    @Test
     public void testCourseDetails() throws Exception {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();;
@@ -69,7 +69,7 @@ class CourseControllerTest { //TODO comments
             .andExpect(view().name("courses/c_edit"))
             .andExpect(model().attribute("course", courseDTO))
             .andExpect(model().attributeExists("teachers"));
-    }*/
+    }
 
     @Test
     public void testUpdateCourse() throws Exception {

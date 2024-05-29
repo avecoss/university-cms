@@ -1,12 +1,12 @@
 package dev.alexcoss.universitycms.controller.student;
 
-import dev.alexcoss.universitycms.dto.CourseDTO;
-import dev.alexcoss.universitycms.dto.GroupDTO;
-import dev.alexcoss.universitycms.dto.users.StudentEditCreateDTO;
-import dev.alexcoss.universitycms.dto.users.StudentViewDTO;
-import dev.alexcoss.universitycms.service.CourseService;
-import dev.alexcoss.universitycms.service.GroupService;
-import dev.alexcoss.universitycms.service.StudentService;
+import dev.alexcoss.universitycms.dto.view.CourseDTO;
+import dev.alexcoss.universitycms.dto.view.GroupDTO;
+import dev.alexcoss.universitycms.dto.view.users.StudentEditCreateDTO;
+import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
+import dev.alexcoss.universitycms.service.course.CourseProcessingService;
+import dev.alexcoss.universitycms.service.group.GroupProcessingService;
+import dev.alexcoss.universitycms.service.student.StudentProcessingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,9 @@ import java.util.Locale;
 @RequestMapping("/students/{id}")
 public class StudentController {
 
-    private final StudentService<StudentViewDTO, StudentEditCreateDTO> studentService;
-    private final GroupService<GroupDTO> groupService;
-    private final CourseService<CourseDTO> courseService;
+    private final StudentProcessingService<StudentViewDTO, StudentEditCreateDTO> studentService;
+    private final GroupProcessingService<GroupDTO> groupService;
+    private final CourseProcessingService<CourseDTO> courseService;
 
     @GetMapping
     public String studentDetails(@PathVariable("id") long id, Model model, Locale locale) {

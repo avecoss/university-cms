@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.group;
 
-import dev.alexcoss.universitycms.dto.GroupDTO;
-import dev.alexcoss.universitycms.service.GroupService;
+import dev.alexcoss.universitycms.dto.view.GroupDTO;
+import dev.alexcoss.universitycms.service.group.GroupProcessingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/groups/{id}")
 public class GroupController {
 
-    private final GroupService<GroupDTO> groupService;
+    private final GroupProcessingService<GroupDTO> groupService;
 
     @GetMapping
     public String groupDetails(@PathVariable("id") int id, Model model) {

@@ -1,7 +1,10 @@
 package dev.alexcoss.universitycms.service;
 
-import dev.alexcoss.universitycms.dto.users.TeacherCreateEditDTO;
-import dev.alexcoss.universitycms.dto.users.TeacherDTO;
+import dev.alexcoss.universitycms.dto.view.users.TeacherCreateEditDTO;
+import dev.alexcoss.universitycms.dto.view.users.TeacherDTO;
+import dev.alexcoss.universitycms.service.generator.LoginPasswordGenerator;
+import dev.alexcoss.universitycms.service.generator.PersonBuilder;
+import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.TeacherRepository;
