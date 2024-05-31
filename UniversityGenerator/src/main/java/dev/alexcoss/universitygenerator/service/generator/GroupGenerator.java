@@ -1,6 +1,6 @@
 package dev.alexcoss.universitygenerator.service.generator;
 
-import dev.alexcoss.universitygenerator.dto.GroupDTO;
+import dev.alexcoss.universitygenerator.dto.GGroup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,21 +23,21 @@ public class GroupGenerator {
 
     private final Random random = new Random();
 
-    public List<GroupDTO> generateGroupList(int amount) {
+    public List<GGroup> generateGroupList(int amount) {
         if (amount > 0)
             groupCount = amount;
 
-        List<GroupDTO> groupList = new ArrayList<>();
+        List<GGroup> groupList = new ArrayList<>();
 
         for (int i = 0; i < groupCount; i++) {
-            GroupDTO group = generateRandomName();
+            GGroup group = generateRandomName();
             groupList.add(group);
         }
 
         return groupList;
     }
 
-    private GroupDTO generateRandomName() {
+    private GGroup generateRandomName() {
         StringBuilder nameBuilder = new StringBuilder();
 
         for (int i = 0; i < quantityCharacters; i++) {
@@ -50,7 +50,7 @@ public class GroupGenerator {
             nameBuilder.append(generateRandomDigit());
         }
 
-        GroupDTO group = new GroupDTO();
+        GGroup group = new GGroup();
         group.setName(nameBuilder.toString());
 
         return group;

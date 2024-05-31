@@ -1,10 +1,10 @@
 package dev.alexcoss.universitygenerator.service;
 
-import dev.alexcoss.universitygenerator.dto.CourseDTO;
+import dev.alexcoss.universitygenerator.dto.GCourse;
+import dev.alexcoss.universitygenerator.mapper.CourseMapper;
 import dev.alexcoss.universitygenerator.model.Course;
 import dev.alexcoss.universitygenerator.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +17,13 @@ import java.util.stream.StreamSupport;
 public class CourseService{
 
     private final CourseRepository repository;
-    private final ModelMapper modelMapper;
+    private final CourseMapper courseMapper;
 
-    public List<CourseDTO> findAllCourses() {
+    public List<GCourse> findAllCourses() {
         Iterable<Course> courses = repository.findAll();
 
         return StreamSupport.stream(courses.spliterator(), false)
-            .map(course -> modelMapper.map(course, CourseDTO.class))
+            .map(courseMapper::courseToGCourse)
             .toList();
     }
 }

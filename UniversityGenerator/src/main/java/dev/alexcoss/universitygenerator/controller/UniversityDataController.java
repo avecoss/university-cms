@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +18,8 @@ public class UniversityDataController {
 
     private final StartingDataManager startingDataManager;
 
-    @PostMapping("/generate")
-    public ResponseEntity<UniversityData> generateData(@RequestBody @Valid GenerateDataRequest request,
+    @GetMapping("/generate")
+    public ResponseEntity<UniversityData> generateData(@Valid @ModelAttribute GenerateDataRequest request,
                                                        BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors())
             throw new BindException(bindingResult);
@@ -31,7 +28,7 @@ public class UniversityDataController {
             .body(startingDataManager.generateUniversityData(request));
     }
 
-    @PostMapping("/static")
+    @GetMapping("/static")
     public ResponseEntity<UniversityData> generateData() {
 
         return ResponseEntity.status(HttpStatus.OK)

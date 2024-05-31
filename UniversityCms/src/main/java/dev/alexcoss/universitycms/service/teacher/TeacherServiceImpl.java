@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -92,6 +93,10 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
                 new Object[]{teacherId}, "Teacher with ID {0} not found!", LocaleContextHolder.getLocale())));
 
         repository.deleteById(teacherId);
+    }
+
+    public boolean findPersonByUsername(String username){
+        return repository.findByUsername(username).isPresent();
     }
 
     private Set<String> findAllUsernames() {

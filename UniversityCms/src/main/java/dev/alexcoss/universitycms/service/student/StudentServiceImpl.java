@@ -101,6 +101,10 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
         repository.deleteById(studentId);
     }
 
+    public boolean findPersonByUsername(String username){
+        return repository.findByUsername(username).isPresent();
+    }
+
     private Set<String> findAllUsernames() {
         return repository.findAllUsernames();
     }

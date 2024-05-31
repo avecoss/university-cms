@@ -25,10 +25,10 @@ public class StartingDataManager {
     private final StudentService studentService;
 
     public UniversityData generateUniversityData(GenerateDataRequest request) {
-        List<GroupDTO> groupList = groupsManager.getGroups(request.getNumberOfGroups());
-        List<TeacherDTO> teacherList = teachersManager.getTeachers(request.getNumberOfTeachers());
-        List<CourseDTO> courseList = coursesManager.getCourses(request.getNumberOfCourses(), teacherList);
-        List<StudentDTO> studentList = studentsManager.getStudents(request.getNumberOfStudents(), groupList, courseList);
+        List<GGroup> groupList = groupsManager.getGroups(request.getNumberOfGroups());
+        List<GTeacher> teacherList = teachersManager.getTeachers(request.getNumberOfTeachers());
+        List<GCourse> courseList = coursesManager.getCourses(request.getNumberOfCourses(), teacherList);
+        List<GStudent> studentList = studentsManager.getStudents(request.getNumberOfStudents(), groupList, courseList);
 
         return UniversityData.builder()
             .groups(groupList)

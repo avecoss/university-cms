@@ -32,10 +32,14 @@
 
                 <h4 class="mb-2">Group:</h4>
 
-                <div class="list-group mb-2">
+                <div th:if="${studentView.getGroup() != null}" class="list-group mb-2">
                     <a th:href="@{/groups/{id}(id=${studentView.getGroup().getId()})}"
                        class="list-group-item list-group-item-action"
                        th:text="${'Group: ' + studentView.getGroup().getName()}"></a>
+                </div>
+
+                <div th:if="${studentView.getGroup() == null}" class="list-group mb-2">
+                    <p class="card-text">Group: no group</p>
                 </div>
 
                 <h4 class="mb-2">Courses:</h4>
@@ -57,5 +61,6 @@
     </div>
 </section>
 
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
 </body>
 </html>

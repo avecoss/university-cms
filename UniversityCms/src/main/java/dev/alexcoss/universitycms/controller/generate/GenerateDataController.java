@@ -33,13 +33,13 @@ public class GenerateDataController {
         }
         universityDataService.saveUniversityData(generateDataRequest);
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @PostMapping("/static")
     public String getStaticData() {
         universityDataService.saveUniversityData();
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 }

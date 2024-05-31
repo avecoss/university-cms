@@ -1,5 +1,6 @@
 package dev.alexcoss.universitycms.service.generator;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -23,7 +24,10 @@ public class LoginPasswordGenerator {
     }
 
     private String loginGenerator(String firstName, String lastName, int index) {
-        return firstName.substring(0, Math.min(3, firstName.length())) +
-            lastName.substring(0, Math.min(3, lastName.length()) + index).toLowerCase();
+        String baseLogin =  firstName.substring(0, Math.min(3, firstName.length())) +
+            lastName.substring(0, Math.min(3, lastName.length())).toLowerCase();
+
+        String randomSuffix = RandomStringUtils.randomAlphanumeric(6);
+        return baseLogin + randomSuffix;
     }
 }

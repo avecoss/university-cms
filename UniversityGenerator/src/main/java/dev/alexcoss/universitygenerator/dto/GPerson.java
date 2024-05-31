@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public abstract class PersonDTO {
+public abstract class GPerson {
 
     private String firstName;
     private String lastName;

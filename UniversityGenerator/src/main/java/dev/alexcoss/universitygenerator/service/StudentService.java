@@ -1,6 +1,6 @@
 package dev.alexcoss.universitygenerator.service;
 
-import dev.alexcoss.universitygenerator.dto.StudentDTO;
+import dev.alexcoss.universitygenerator.dto.GStudent;
 import dev.alexcoss.universitygenerator.model.Student;
 import dev.alexcoss.universitygenerator.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ public class StudentService {
     private final StudentRepository repository;
     private final ModelMapper modelMapper;
 
-    public List<StudentDTO> findAllStudents() {
+    public List<GStudent> findAllStudents() {
         Iterable<Student> students = repository.findAll();
 
         return StreamSupport.stream(students.spliterator(), false)
-            .map(student -> modelMapper.map(student, StudentDTO.class))
+            .map(student -> modelMapper.map(student, GStudent.class))
             .toList();
     }
 }

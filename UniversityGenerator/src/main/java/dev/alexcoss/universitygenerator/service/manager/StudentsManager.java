@@ -1,8 +1,8 @@
 package dev.alexcoss.universitygenerator.service.manager;
 
-import dev.alexcoss.universitygenerator.dto.CourseDTO;
-import dev.alexcoss.universitygenerator.dto.GroupDTO;
-import dev.alexcoss.universitygenerator.dto.StudentDTO;
+import dev.alexcoss.universitygenerator.dto.GCourse;
+import dev.alexcoss.universitygenerator.dto.GGroup;
+import dev.alexcoss.universitygenerator.dto.GStudent;
 import dev.alexcoss.universitygenerator.enumerated.Role;
 import dev.alexcoss.universitygenerator.service.generator.PersonGenerator;
 import lombok.RequiredArgsConstructor;
@@ -16,28 +16,27 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 public class StudentsManager {
-    private final PersonGenerator<StudentDTO> personGenerator;
+    private final PersonGenerator<GStudent> personGenerator;
     private final Random random = new Random();
 
-    public List<StudentDTO> getStudents(int amount, List<GroupDTO> groups, List<CourseDTO> courses) {
-        List<StudentDTO> students = personGenerator.generatePersons(Role.STUDENT, amount);
+    public List<GStudent> getStudents(int amount, List<GGroup> groups, List<GCourse> courses) {
+        List<GStudent> students = personGenerator.generatePersons(Role.STUDENT, amount);
 
-        for (StudentDTO student : students) {
-            GroupDTO randomGroup = getRandomGroup(groups);
-            student.setGroup(randomGroup);
-            randomGroup.getStudents().add(student);
+        for (GStudent student : students) {
+            GGroup randomGroup = getRandomGroup(groups);
+            randomGroup.getStudentUsernames().add(student.getUsername());
         }
 
-        for (CourseDTO course : courses) {
+        for (GCourse course : courses) {
             int studentsCount = getRandomStudentsCount(amount);
-            Set<StudentDTO> randomStudents = getRandomStudents(students, studentsCount, course);
-            course.getStudents().addAll(randomStudents);
+            Set<String> randomStudents = getRandomStudents(students, studentsCount);
+            course.getStudentUsernames().addAll(randomStudents);
         }
 
         return students;
     }
 
-    private GroupDTO getRandomGroup(List<GroupDTO> groups) {
+    private GGroup getRandomGroup(List<GGroup> groups) {
         return groups.get(random.nextInt(groups.size()));
     }
 
@@ -45,13 +44,12 @@ public class StudentsManager {
         return random.nextInt(totalStudents) + 1;
     }
 
-    private Set<StudentDTO> getRandomStudents(List<StudentDTO> students, int count, CourseDTO course) {
-        Set<StudentDTO> randomStudents = new HashSet<>();
+    private Set<String> getRandomStudents(List<GStudent> students, int count) {
+        Set<String> randomStudents = new HashSet<>();
 
         while (randomStudents.size() < count) {
-            StudentDTO randomStudent = students.get(random.nextInt(students.size()));
-            randomStudent.getCourses().add(course);
-            randomStudents.add(randomStudent);
+            GStudent randomStudent = students.get(random.nextInt(students.size()));
+            randomStudents.add(randomStudent.getUsername());
         }
 
         return randomStudents;

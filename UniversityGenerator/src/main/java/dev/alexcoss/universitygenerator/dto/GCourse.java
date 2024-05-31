@@ -1,6 +1,5 @@
 package dev.alexcoss.universitygenerator.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import java.util.HashSet;
@@ -10,13 +9,12 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CourseDTO {
+public class GCourse {
 
     private String name;
-    @JsonManagedReference
-    private TeacherDTO teacher;
-    @JsonManagedReference
+    private String teacherUsername;
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Builder.Default
-    private Set<StudentDTO> students = new HashSet<>();
+    private Set<String> studentUsernames = new HashSet<>();
 }

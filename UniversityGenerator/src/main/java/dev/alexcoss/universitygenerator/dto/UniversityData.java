@@ -13,8 +13,8 @@ import java.util.List;
 @Builder
 public class UniversityData {
 
-    private List<StudentDTO> students;
-    private List<GroupDTO> groups;
-    private List<CourseDTO> courses;
-    private List<TeacherDTO> teachers;
+    private List<GStudent> students;
+    private List<GGroup> groups;
+    private List<GCourse> courses;
+    private List<GTeacher> teachers;
 }

@@ -33,7 +33,7 @@ nav {
 }
 
 .menu .menu_item_login {
-    margin-left: auto
+    margin-left: auto;
 }
 
 .menu .menu_item_login span.menu_link_text {
@@ -224,23 +224,34 @@ section.promo .container .right_column h1 {
     line-height: .9
 }
 
-section.promo .container .right_column .button_login button {
-    background: -webkit-gradient(linear, left top, right top, from(#4D9AF8), to(#2131FB));
+.btn-custom-login {
     background: linear-gradient(to right, #4D9AF8, #2131FB);
+    border: none;
     color: #fff;
-    margin-top: 30px;
     min-width: 200px;
     padding: 15px 30px;
-    border: none;
-    cursor: pointer;
     border-radius: 12px;
-    -webkit-transition: .2s all;
-    transition: .2s all
 }
 
-section.promo .container .right_column .button_login button:hover {
+.btn-custom-login:hover {
     -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, .3);
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, .3)
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, .3);
+    color: white;
+}
+
+.btn-custom-registration {
+    background-color: transparent;
+    border: 2px solid #2131FB;
+    color: #2131FB;
+    min-width: 200px;
+    padding: 15px 30px;
+    border-radius: 12px;
+}
+
+.btn-custom-registration:hover {
+    -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, .3);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, .3);
+    border: 2px solid #2131FB;
 }
 
 section.contact .background_contact {
@@ -266,8 +277,9 @@ section.contact .background_contact .row .btn-primary:hover {
 
 footer .background_footer {
     padding: 20px;
-    background: -webkit-gradient(linear, left top, right top, from(#4D9AF8), to(#2131FB));
-    background: linear-gradient(to right, #4D9AF8, #2131FB);
+    /*background: -webkit-gradient(linear, left top, right top, from(#4D9AF8), to(#2131FB));
+    background: linear-gradient(to right, #4D9AF8, #2131FB);*/
+    background: darkgray;
     bottom: 0;
     width: 100%;
     color: #fff;
@@ -286,6 +298,19 @@ section.title .background_title {
 
 .error_msg {
     color: red;
+}
+
+.user-avatar {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #4D9AF8;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -51,7 +51,9 @@ public class StudentsController {
                                 @RequestParam (value = "courseIds", required = false) List<Integer> courseIds,
                                 Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("studentView", new StudentViewDTO());
             model.addAttribute("groups", groupService.findAllGroups());
+            model.addAttribute("courses", courseService.findAllCourses());
             return "students/s_new";
         }
 

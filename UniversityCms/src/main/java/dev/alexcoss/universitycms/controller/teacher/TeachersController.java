@@ -45,6 +45,7 @@ public class TeachersController {
     public String createTeacher(@ModelAttribute("teacherCreate") @Valid TeacherCreateEditDTO teacher, BindingResult bindingResult,
                                 @RequestParam(value = "courseIds", required = false) List<Integer> courseIds, Model model, Locale locale) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("teacherView", new TeacherViewDTO());
             model.addAttribute("courses", courseService.findAllCourses());
             return "teachers/t_new";
         }

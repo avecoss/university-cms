@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+<section class="registration">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Registration</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/registration}" method="post" th:object="${person}">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}" required/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" required/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username" th:field="*{username}" required/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" th:field="*{password}" required/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
+</body>
+</html>

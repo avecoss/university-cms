@@ -46,7 +46,7 @@
                     <div class="mb-3">
                         <label for="groups" class="form-label">Group:</label>
                         <select class="form-select" id="groups" name="groupId">
-                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}" th:selected="${group.id == studentView.group.id}"></option>
+                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}" th:selected="${studentView.group != null and group.id == studentView.group.id}"></option>
                         </select>
                     </div>
 
@@ -58,12 +58,13 @@
                             <label class="form-check-label" th:for="'course_' + ${course.id}" th:text="${course.name}"></label>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
 
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
 </body>
 </html>

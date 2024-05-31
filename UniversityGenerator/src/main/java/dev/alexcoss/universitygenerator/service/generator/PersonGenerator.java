@@ -1,6 +1,6 @@
 package dev.alexcoss.universitygenerator.service.generator;
 
-import dev.alexcoss.universitygenerator.dto.PersonDTO;
+import dev.alexcoss.universitygenerator.dto.GPerson;
 import dev.alexcoss.universitygenerator.enumerated.Role;
 import dev.alexcoss.universitygenerator.service.factory.PersonFactory;
 import dev.alexcoss.universitygenerator.service.factory.StudentFactory;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class PersonGenerator<T extends PersonDTO> {
+public class PersonGenerator<T extends GPerson> {
     private final LoginPasswordGenerator loginPasswordGenerator;
     private final Map<Role, PersonFactory<T>> factoryMap;
 

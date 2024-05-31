@@ -1,6 +1,6 @@
 package dev.alexcoss.universitygenerator.service;
 
-import dev.alexcoss.universitygenerator.dto.TeacherDTO;
+import dev.alexcoss.universitygenerator.dto.GTeacher;
 import dev.alexcoss.universitygenerator.model.Teacher;
 import dev.alexcoss.universitygenerator.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ public class TeacherService {
     private final TeacherRepository repository;
     private final ModelMapper modelMapper;
 
-    public List<TeacherDTO> findAllGTeachers() {
+    public List<GTeacher> findAllGTeachers() {
         Iterable<Teacher> teachers = repository.findAll();
 
         return StreamSupport.stream(teachers.spliterator(), false)
-            .map(teacher -> modelMapper.map(teacher, TeacherDTO.class))
+            .map(teacher -> modelMapper.map(teacher, GTeacher.class))
             .toList();
     }
 }

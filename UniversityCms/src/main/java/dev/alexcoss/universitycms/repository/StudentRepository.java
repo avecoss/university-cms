@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -22,4 +23,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("SELECT s.username FROM Student s")
     Set<String> findAllUsernames();
+
+    Optional<Student> findByUsername(String username);
 }

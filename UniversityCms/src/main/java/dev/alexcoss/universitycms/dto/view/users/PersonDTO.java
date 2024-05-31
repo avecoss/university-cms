@@ -11,8 +11,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public abstract class PersonDTO {
-
-    private long id;
+    private Long id;
 
     @NotEmpty(message = "{person.validation.not_empty_firstname}")
     @Size(min = 2, max = 50, message = "{person.validation.size_firstname}")
