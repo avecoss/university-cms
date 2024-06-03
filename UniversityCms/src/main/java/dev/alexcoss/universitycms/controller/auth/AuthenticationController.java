@@ -31,7 +31,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registration")
-    public String register(@ModelAttribute("person") @Valid PersonAuthDTO person, BindingResult bindingResult) { //todo handle exception
+    public String register(@ModelAttribute("person") @Valid PersonAuthDTO person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
             return "auth/registration";

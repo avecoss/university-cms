@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>[[${teacherView.getFirstName()+' '+teacherView.getLastName()}]]</title>
@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a th:href="@{/teachers/{id}/edit(id=${teacherView.getId()})}" class="btn btn-secondary me-2">Edit Teacher</a>
-                    <form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacherView.getId()})}">
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/teachers/{id}/edit(id=${teacherView.getId()})}" class="btn btn-secondary me-2">Edit Teacher</a>
+                    <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{/teachers/{id}(id=${teacherView.getId()})}">
                         <button type="submit" class="btn btn-danger">Delete Teacher</button>
                     </form>
                 </div>

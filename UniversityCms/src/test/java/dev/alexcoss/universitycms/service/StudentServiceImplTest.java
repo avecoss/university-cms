@@ -12,7 +12,6 @@ import dev.alexcoss.universitycms.service.generator.PersonBuilder;
 import dev.alexcoss.universitycms.service.student.StudentServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
-import dev.alexcoss.universitycms.util.exception.NullEntityListException;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = {StudentServiceImpl.class, ModelMapper.class})
@@ -111,8 +111,8 @@ class StudentServiceImplTest {
 
     private List<StudentEditCreateDTO> getSampleStudentDtoList() {
         return Arrays.asList(
-            StudentEditCreateDTO.builder().id(1).firstName("John").lastName("Doe").build(),
-            StudentEditCreateDTO.builder().id(2).firstName("Jane").lastName("Smith").build()
+            StudentEditCreateDTO.builder().id(1L).firstName("John").lastName("Doe").build(),
+            StudentEditCreateDTO.builder().id(2L).firstName("Jane").lastName("Smith").build()
         );
     }
 

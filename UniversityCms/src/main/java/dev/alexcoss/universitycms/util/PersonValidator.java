@@ -32,7 +32,7 @@ public class PersonValidator implements Validator {
         boolean teacherExists = teacherService.findPersonByUsername(person.getUsername());
 
         if (studentExists || teacherExists) {
-            errors.rejectValue("username", null, "Username already exists");
+            errors.rejectValue("username", "Username already exists", "Username already exists");
         }
     }
 }

@@ -24,11 +24,11 @@
     </div>
 </section>
 
-<section class="edite_student">
+<section class="edit_student">
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Edite Student</h5>
+                <h5 class="card-title">Edit Student</h5>
             </div>
             <div class="card-body">
                 <form th:method="PATCH" th:action="@{/students/{id}(id=${studentView.getId()})}" th:object="${studentView}">

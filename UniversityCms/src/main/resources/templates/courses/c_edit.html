@@ -24,11 +24,11 @@
     </div>
 </section>
 
-<section class="edite_course">
+<section class="edit_course">
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Edite Course</h5>
+                <h5 class="card-title">Edit Course</h5>
             </div>
             <div class="card-body">
                 <form th:method="PATCH" th:action="@{/courses/{id}(id=${course.getId()})}" th:object="${course}">
@@ -44,7 +44,7 @@
                                     th:selected="${teacher.id == course.teacher.id}"></option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Edite</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </div>
         </div>

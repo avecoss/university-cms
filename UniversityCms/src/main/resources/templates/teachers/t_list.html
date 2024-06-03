@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>University</title>
@@ -33,7 +33,7 @@
                 </form>
             </div>
             <div class="col-md-6 text-end">
-                <a th:href="@{/teachers/new}" class="btn btn-primary">Create New Professor</a>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/teachers/new}" class="btn btn-primary">Create New Professor</a>
             </div>
         </div>
 
@@ -56,8 +56,8 @@
 
                         <div class="d-flex">
                             <a th:href="@{/teachers/{id}(id=${teacher.getId()})}" class="btn btn-primary btn-custom-width me-2">View</a>
-                            <a th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary btn-custom-width me-2">Edit</a>
-                            <form th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
+                            <a sec:authorize="hasRole('ADMIN')" th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary btn-custom-width me-2">Edit</a>
+                            <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
                                 <button type="submit" class="btn btn-danger btn-custom-width">Delete</button>
                             </form>
                         </div>

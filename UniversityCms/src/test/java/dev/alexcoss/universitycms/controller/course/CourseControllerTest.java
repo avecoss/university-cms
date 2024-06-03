@@ -75,7 +75,7 @@ class CourseControllerTest {
     public void testUpdateCourse() throws Exception {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();
-        TeacherViewDTO teacherDTO = TeacherViewDTO.builder().id(1).build();
+        TeacherViewDTO teacherDTO = TeacherViewDTO.builder().id(1L).build();
 
         when(teacherService.findTeacherById(1L)).thenReturn(teacherDTO);
 

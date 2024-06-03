@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+<section class="user-edit">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Edit User</h5>
+            </div>
+            <div class="card-body">
+                <form th:method="PATCH" th:action="@{/details}" th:object="${user}">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter first name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Student Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter last name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current password:</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Enter password"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New password:</label>
+                        <input type="password" class="form-control" id="newPassword" th:field="*{password}" placeholder="Enter password"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
+</body>
+</html>

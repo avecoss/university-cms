@@ -48,3 +48,6 @@ errors:
     400:
         title: "Validation error"
         header: "Error 400: validation error"
+    500:
+        title: "Internal Server Error"
+        header: "Error 400: Internal Server Error"

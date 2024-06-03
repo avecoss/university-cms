@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,26 +21,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
+        return http
             .authorizeHttpRequests(authorize ->
                 authorize
-                    //.requestMatchers("/api/users", "/api/change_role").hasRole("ADMIN")
                     .requestMatchers("/webjars/**", "/css/**", "/icons/**", "/img/**").permitAll()
                     .requestMatchers("/login", "/error", "/registration", "/home").permitAll()
-                    //.requestMatchers("/api/auth/registration").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated())
-                    //.anyRequest().hasAnyRole("USER", "ADMIN"))
-            //.sessionManagement(sessionManagement ->
-            //    sessionManagement
-            //        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
             .formLogin(login ->
                 login
                     .loginPage("/login")
                     .defaultSuccessUrl("/home", true)
-                    .failureUrl("/login?error"));
-
-        return http.build();
+                    .failureUrl("/login?error"))
+            .build();
     }
 
     @Bean
@@ -53,12 +46,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
-
-    //@Bean
-    //public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-    //    return configuration.getAuthenticationManager();
-    //}
 }

@@ -24,11 +24,11 @@
     </div>
 </section>
 
-<section class="edite_group">
+<section class="edit_group">
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Edite Group</h5>
+                <h5 class="card-title">Edit Group</h5>
             </div>
             <div class="card-body">
                 <form th:method="PATCH" th:action="@{/groups/{id}(id=${group.getId()})}" th:object="${group}">
@@ -37,7 +37,7 @@
                         <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter group name"/>
                         <div class="form-text error_msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Edite</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </div>
         </div>

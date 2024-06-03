@@ -11,10 +11,8 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuperBuilder
-public class PersonAuthDTO extends PersonDTO {
+public class PersonEditDTO extends PersonDTO {
 
-    @NotEmpty(message = "{person.validation.not_empty_username}")
-    @Size(min = 2, max = 100, message = "{person.validation.size_username}")
     private String username;
 
     @NotEmpty(message = "{person.validation.not_empty_pass}")
