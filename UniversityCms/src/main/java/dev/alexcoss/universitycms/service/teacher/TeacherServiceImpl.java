@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveTeacher(TeacherCreateEditDTO teacher, Locale locale) {
         isValidTeacher(teacher, locale);
         repository.save(buildTeacherWithLoginAndPass(teacher));
@@ -67,6 +69,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveTeacher(TeacherCreateEditDTO teacher) {
         Locale locale = LocaleContextHolder.getLocale();
         isValidTeacher(teacher, locale);
@@ -75,18 +78,21 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated) {
         updateTeacherFromDto(id, updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated, Locale locale) {
         updateTeacherFromDto(id, updated, locale);
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteTeacherById(Long teacherId) {
         repository.findById(teacherId)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("teacher.errors.not_found",

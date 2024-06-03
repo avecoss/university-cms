@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,7 @@ public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveGroup(GroupDTO groupDTO) {
         isValidGroup(groupDTO);
         repository.save(modelMapper.map(groupDTO, Group.class));
@@ -58,6 +60,7 @@ public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateGroup(Integer id, GroupDTO updated) {
         isValidGroup(updated);
 
@@ -72,6 +75,7 @@ public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteGroupById(Integer id) {
         repository.findById(id)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",

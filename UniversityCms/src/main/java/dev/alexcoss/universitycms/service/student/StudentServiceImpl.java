@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +68,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveStudent(StudentEditCreateDTO student) {
         Locale locale = LocaleContextHolder.getLocale();
         isValidStudent(student, locale);
@@ -75,6 +77,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void saveStudent(StudentEditCreateDTO student, Locale locale) {
         isValidStudent(student, locale);
         repository.save(buildStudentWithLoginAndPass(student));
@@ -82,10 +85,13 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateStudent(Long id, StudentEditCreateDTO updated) {
         updateStudentFromDto(id, updated, LocaleContextHolder.getLocale());
     }
 
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void updateStudent(Long id, StudentEditCreateDTO updated, Locale locale) {
         updateStudentFromDto(id, updated, locale);
@@ -93,6 +99,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteStudentById(Long studentId) {
         repository.findById(studentId)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("student.errors.not_found",
