@@ -1,14 +1,15 @@
 package dev.alexcoss.universitycms.service.teacher;
 
-import dev.alexcoss.universitycms.dto.view.users.TeacherCreateEditDTO;
-import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherCreateEditDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.TeacherRepository;
 import dev.alexcoss.universitycms.service.generator.LoginPasswordGenerator;
-import dev.alexcoss.universitycms.service.generator.PersonBuilder;
+import dev.alexcoss.universitycms.service.generator.TeacherBuilder;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ import java.util.Set;
 public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> {
 
     private final TeacherRepository repository;
-    private final PersonBuilder personBuilder;
+    private final TeacherBuilder teacherBuilder;
     private final LoginPasswordGenerator loginPasswordGenerator;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
@@ -64,7 +63,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     @PreAuthorize("hasRole('ADMIN')")
     public void saveTeacher(TeacherCreateEditDTO teacher, Locale locale) {
         isValidTeacher(teacher, locale);
-        repository.save(buildTeacherWithLoginAndPass(teacher));
+        repository.save(teacherBuilder.buildEntity(teacher));
     }
 
     @Transactional
@@ -73,21 +72,21 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     public void saveTeacher(TeacherCreateEditDTO teacher) {
         Locale locale = LocaleContextHolder.getLocale();
         isValidTeacher(teacher, locale);
-        repository.save(buildTeacherWithLoginAndPass(teacher));
+        repository.save(teacherBuilder.buildEntity(teacher));
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated) {
-        updateTeacherFromDto(id, updated, LocaleContextHolder.getLocale());
+        updated(id, updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated, Locale locale) {
-        updateTeacherFromDto(id, updated, locale);
+        updated(id, updated, locale);
     }
 
     @Transactional
@@ -101,17 +100,9 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
         repository.deleteById(teacherId);
     }
 
-    public boolean findPersonByUsername(String username){
-        return repository.findByUsername(username).isPresent();
-    }
-
-    private Set<String> findAllUsernames() {
-        return repository.findAllUsernames();
-    }
-
     private void isValidTeacher(TeacherCreateEditDTO teacher, Locale locale) {
-        if (teacher == null || teacher.getFirstName() == null || teacher.getFirstName().isEmpty() ||
-            teacher.getLastName() == null || teacher.getLastName().isEmpty()) {
+        if (teacher == null || teacher.getUser() == null ||
+            StringUtils.isBlank(teacher.getUser().getFirstName()) || StringUtils.isBlank(teacher.getUser().getLastName())) {
             throw new IllegalEntityException(messageSource.getMessage("teacher.errors.invalid", new Object[0],
                 "Invalid teacher data", locale));
         }
@@ -124,23 +115,15 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
                 new Object[]{id}, "Teacher with ID {0} not found!", locale)));
     }
 
-    private Teacher buildTeacherWithLoginAndPass(TeacherCreateEditDTO teacherDTO) {
-        Teacher teacher = personBuilder.buildEntity(teacherDTO);
-        teacher.setUsername(loginPasswordGenerator.generateStartingLogin(teacher.getFirstName(), teacher.getLastName(), findAllUsernames()));
-        teacher.setPassword(loginPasswordGenerator.generateStartingPassword());
-
-        return teacher;
-    }
-
-    private void updateTeacherFromDto(Long id, TeacherCreateEditDTO updated, Locale locale) {
+    private void updated(Long id, TeacherCreateEditDTO updated, Locale locale) {
         isValidTeacher(updated, locale);
 
-        Teacher teacherWithCourses = personBuilder.buildEntity(updated);
+        Teacher teacherWithCourses = teacherBuilder.buildEntity(updated);
 
         repository.findById(id)
             .map(teacher -> {
-                teacher.setFirstName(teacherWithCourses.getFirstName());
-                teacher.setLastName(teacherWithCourses.getLastName());
+                teacher.getUser().setFirstName(teacherWithCourses.getUser().getFirstName());
+                teacher.getUser().setLastName(teacherWithCourses.getUser().getLastName());
                 teacher.setCourses(teacherWithCourses.getCourses());
 
                 return teacher;

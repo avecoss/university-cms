@@ -3,7 +3,7 @@ package dev.alexcoss.universitycms.service.course;
 import java.util.List;
 import java.util.Locale;
 
-public interface CourseProcessingService<T> extends CourseService<T>{
+public interface CourseProcessingService<T> extends CourseService{
 
     List<T> findAllCourses();
     List<T> findCoursesByLetters(String letter);

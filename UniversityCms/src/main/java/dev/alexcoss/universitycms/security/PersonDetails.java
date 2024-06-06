@@ -1,6 +1,6 @@
 package dev.alexcoss.universitycms.security;
 
-import dev.alexcoss.universitycms.dto.view.users.PersonAuthDTO;
+import dev.alexcoss.universitycms.dto.view.user.UserAuthDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,15 +8,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor
 public class PersonDetails implements UserDetails {
-    private final PersonAuthDTO person;
+    private final UserAuthDTO person;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + person.getRole().toString()));
+        return person.getAuthorities().stream()
+            .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority.getRole()))
+            .toList();
     }
 
     public String getPassword() {

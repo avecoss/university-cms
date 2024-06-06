@@ -1,8 +1,8 @@
 package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
-import dev.alexcoss.universitycms.dto.view.users.TeacherCreateEditDTO;
-import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherCreateEditDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.service.course.CourseProcessingService;
 import dev.alexcoss.universitycms.service.teacher.TeacherProcessingService;
 import jakarta.validation.Valid;

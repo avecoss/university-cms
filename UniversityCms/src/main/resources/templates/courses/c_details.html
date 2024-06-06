@@ -36,7 +36,7 @@
                 <div class="list-group">
                     <a th:href="@{/teachers/{id}(id=${course.getTeacher().getId()})}"
                        class="list-group-item list-group-item-action"
-                       th:text="${'Teacher: ' + course.getTeacher().getFirstName() + ' ' + course.getTeacher().getLastName()}"></a>
+                       th:text="${'Teacher: ' + course.getTeacher().getUser().getFirstName() + ' ' + course.getTeacher().getUser().getLastName()}"></a>
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">

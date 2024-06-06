@@ -1,11 +1,14 @@
 package dev.alexcoss.universitycms.controller.user;
 
-import dev.alexcoss.universitycms.dto.view.users.PersonEditDTO;
+import dev.alexcoss.universitycms.dto.view.user.UserEditDTO;
 import dev.alexcoss.universitycms.security.PersonDetails;
 import dev.alexcoss.universitycms.service.user.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,12 +36,14 @@ public class UserDetailsController {
     }
 
     @PatchMapping
-    public String updateUser(@ModelAttribute("user") @Valid PersonEditDTO user, BindingResult bindingResult,
+    public String updateUser(@ModelAttribute("user") @Valid UserEditDTO user, BindingResult bindingResult,
                              @RequestParam("current_password") String password,
-                             @AuthenticationPrincipal PersonDetails currentUser) {
+                             @AuthenticationPrincipal PersonDetails currentUser,
+                             HttpServletRequest request) throws ServletException {
 
         user.setUsername(currentUser.getPerson().getUsername());
-        user.setRole(currentUser.getPerson().getRole());
+        user.setAuthorities(currentUser.getPerson().getAuthorities());
+        user.setEmail(currentUser.getPerson().getEmail());
 
         if (!userService.checkPassword(password, user))
             bindingResult.rejectValue("password", "password.invalid", "Password does not match");
@@ -47,6 +52,8 @@ public class UserDetailsController {
             return "user/edit";
 
         userService.updateUser(user);
-        return "redirect:/logout";
+
+        request.logout();
+        return "redirect:/login?logout";
     }
 }

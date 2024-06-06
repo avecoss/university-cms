@@ -38,12 +38,4 @@ public class AdviceExceptionHandler {
         model.addAttribute("error", ex.getMessage());
         return "errors/400";
     }
-
-    @ExceptionHandler(Exception.class)
-    public String handleAllExceptions(Exception ex, Model model, HttpServletResponse response) {
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        log.error("An error occurred: {}", ex.getMessage());
-        model.addAttribute("error", "An unexpected error occurred. Please try again later.");
-        return "errors/500";
-    }
 }

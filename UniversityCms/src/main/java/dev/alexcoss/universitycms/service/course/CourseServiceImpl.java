@@ -42,7 +42,6 @@ public class CourseServiceImpl implements CourseProcessingService<CourseDTO> {
         return allByNameStartingWith.stream()
             .map(course -> modelMapper.map(course, CourseDTO.class))
             .toList();
-
     }
 
     @Override

@@ -20,11 +20,11 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
-    private int id;
+    private Integer id;
 
     @NotEmpty(message = "{course.validation.not_empty}")
     @Pattern(regexp = "^[A-Z]{2}-\\d{2,3}$", message = "{course.validation.pattern}")
-    @Column(name = "group_name")
+    @Column(name = "group_name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "group", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)

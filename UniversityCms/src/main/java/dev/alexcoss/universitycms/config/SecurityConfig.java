@@ -26,15 +26,20 @@ public class SecurityConfig {
         return http
             .authorizeHttpRequests(authorize ->
                 authorize
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/webjars/**", "/css/**", "/icons/**", "/img/**").permitAll()
                     .requestMatchers("/login", "/error", "/registration", "/home").permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated())
             .formLogin(login ->
                 login
                     .loginPage("/login")
                     .defaultSuccessUrl("/home", true)
                     .failureUrl("/login?error"))
+            .logout(logout ->
+                logout
+                    .logoutSuccessUrl("/login?logout")
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessHandler(logout.getLogoutSuccessHandler()))
             .build();
     }
 

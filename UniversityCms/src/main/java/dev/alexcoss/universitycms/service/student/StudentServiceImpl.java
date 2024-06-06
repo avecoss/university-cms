@@ -1,14 +1,14 @@
 package dev.alexcoss.universitycms.service.student;
 
-import dev.alexcoss.universitycms.dto.view.users.StudentEditCreateDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
-import dev.alexcoss.universitycms.service.generator.LoginPasswordGenerator;
-import dev.alexcoss.universitycms.service.generator.PersonBuilder;
-import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
+import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
 import dev.alexcoss.universitycms.model.Student;
 import dev.alexcoss.universitycms.repository.StudentRepository;
+import dev.alexcoss.universitycms.service.generator.StudentBuilder;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +25,7 @@ import java.util.Set;
 public class StudentServiceImpl implements StudentProcessingService<StudentViewDTO, StudentEditCreateDTO> {
 
     private final StudentRepository repository;
-    private final PersonBuilder personBuilder;
-    private final LoginPasswordGenerator loginPasswordGenerator;
+    private final StudentBuilder studentBuilder;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
 
@@ -72,7 +70,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     public void saveStudent(StudentEditCreateDTO student) {
         Locale locale = LocaleContextHolder.getLocale();
         isValidStudent(student, locale);
-        repository.save(buildStudentWithLoginAndPass(student));
+        repository.save(studentBuilder.buildEntity(student));
     }
 
     @Transactional
@@ -80,21 +78,21 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     @PreAuthorize("hasRole('ADMIN')")
     public void saveStudent(StudentEditCreateDTO student, Locale locale) {
         isValidStudent(student, locale);
-        repository.save(buildStudentWithLoginAndPass(student));
+        repository.save(studentBuilder.buildEntity(student));
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateStudent(Long id, StudentEditCreateDTO updated) {
-        updateStudentFromDto(id, updated, LocaleContextHolder.getLocale());
+        updated(id, updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void updateStudent(Long id, StudentEditCreateDTO updated, Locale locale) {
-        updateStudentFromDto(id, updated, locale);
+        updated(id, updated, locale);
     }
 
     @Transactional
@@ -108,17 +106,9 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
         repository.deleteById(studentId);
     }
 
-    public boolean findPersonByUsername(String username){
-        return repository.findByUsername(username).isPresent();
-    }
-
-    private Set<String> findAllUsernames() {
-        return repository.findAllUsernames();
-    }
-
     private void isValidStudent(StudentEditCreateDTO student, Locale locale) {
-        if (student == null || student.getFirstName() == null || student.getFirstName().isEmpty() ||
-            student.getLastName() == null || student.getLastName().isEmpty()) {
+        if (student == null || student.getUser() == null ||
+            StringUtils.isBlank(student.getUser().getFirstName()) || StringUtils.isBlank(student.getUser().getLastName())) {
             throw new IllegalEntityException(messageSource.getMessage("student.errors.invalid", new Object[0],
                 "Invalid student data", locale));
         }
@@ -131,23 +121,15 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
                 new Object[]{id}, "Student with ID {0} not found!", locale)));
     }
 
-    private Student buildStudentWithLoginAndPass(StudentEditCreateDTO studentDTO) {
-        Student student = personBuilder.buildEntity(studentDTO);
-        student.setUsername(loginPasswordGenerator.generateStartingLogin(student.getFirstName(), student.getLastName(), findAllUsernames()));
-        student.setPassword(loginPasswordGenerator.generateStartingPassword());
-
-        return student;
-    }
-
-    private void updateStudentFromDto(Long id, StudentEditCreateDTO updated, Locale locale) {
+    private void updated(Long id, StudentEditCreateDTO updated, Locale locale) {
         isValidStudent(updated, locale);
 
-        Student buildStudent = personBuilder.buildEntity(updated);
+        Student buildStudent = studentBuilder.buildEntity(updated);
 
         repository.findById(id)
             .map(student -> {
-                student.setFirstName(buildStudent.getFirstName());
-                student.setLastName(buildStudent.getLastName());
+                student.getUser().setFirstName(buildStudent.getUser().getFirstName());
+                student.getUser().setLastName(buildStudent.getUser().getLastName());
                 student.setCourses(buildStudent.getCourses());
                 student.setGroup(buildStudent.getGroup());
 

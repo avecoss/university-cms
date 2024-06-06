@@ -1,10 +1,9 @@
 package dev.alexcoss.universitycms.service.auth;
 
-import dev.alexcoss.universitycms.dto.view.users.PersonAuthDTO;
-import dev.alexcoss.universitycms.model.Student;
+import dev.alexcoss.universitycms.dto.view.user.UserAuthDTO;
 import dev.alexcoss.universitycms.model.Teacher;
-import dev.alexcoss.universitycms.repository.StudentRepository;
-import dev.alexcoss.universitycms.repository.TeacherRepository;
+import dev.alexcoss.universitycms.model.User;
+import dev.alexcoss.universitycms.repository.UserRepository;
 import dev.alexcoss.universitycms.security.PersonDetails;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,25 +19,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonDetailsService implements UserDetailsService {
 
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Student> student = studentRepository.findByUsername(username);
-        if (student.isPresent()) {
-            PersonAuthDTO foundStudent = modelMapper.map(student.get(), PersonAuthDTO.class);
-            return new PersonDetails(foundStudent);
-        }
-
-        Optional<Teacher> teacher = teacherRepository.findByUsername(username);
-        if (teacher.isPresent()) {
-            PersonAuthDTO foundTeacher = modelMapper.map(teacher.get(), PersonAuthDTO.class);
-            return new PersonDetails(foundTeacher);
-        }
-
-        throw new UsernameNotFoundException("User not found");
+        return new PersonDetails(userRepository.findByUsername(username)
+            .map(user -> modelMapper.map(user, UserAuthDTO.class))
+            .orElseThrow(() -> new UsernameNotFoundException("User not found by username: " + username)));
     }
 }

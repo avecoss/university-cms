@@ -1,6 +1,6 @@
 package dev.alexcoss.universitycms.service.teacher;
 
-import dev.alexcoss.universitycms.dto.view.users.TeacherDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherDTO;
 
 import java.util.List;
 import java.util.Locale;

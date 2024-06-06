@@ -29,6 +29,10 @@
                         <div class="list-group mb-2">
                             <p class="mb-0" th:text="${user.getUsername()}"></p>
                         </div>
+                        <h4 class="mb-2">Email:</h4>
+                        <div class="list-group mb-2">
+                            <p class="mb-0" th:text="${user.getPerson().getEmail()}"></p>
+                        </div>
                         <div class="d-flex justify-content-end mt-3">
                             <a th:href="@{/details/edit}" class="btn btn-secondary me-2">Edit User</a>
                         </div>

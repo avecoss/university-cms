@@ -3,18 +3,16 @@ package dev.alexcoss.universitycms.repository;
 import dev.alexcoss.universitycms.model.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
-    List<Teacher> findAllByFirstNameStartingWith(String letter);
-
-    @Query("SELECT t.username FROM Teacher t")
-    Set<String> findAllUsernames();
-
-    Optional<Teacher> findByUsername(String username);
+    @Query("""
+        SELECT t FROM Teacher t
+        WHERE UPPER(t.user.firstName) LIKE :letter
+        """)
+    List<Teacher> findAllByFirstNameStartingWith(@Param("letter") String letter);
 }

@@ -2,7 +2,7 @@ package dev.alexcoss.universitycms.service.group;
 
 import java.util.List;
 
-public interface GroupProcessingService<T> extends GroupService<T>{
+public interface GroupProcessingService<T> extends GroupService{
 
     List<T> findAllGroups();
     List<T> findGroupsByLetters(String letter);

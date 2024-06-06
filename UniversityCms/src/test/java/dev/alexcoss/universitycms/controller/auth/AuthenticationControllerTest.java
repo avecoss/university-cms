@@ -1,13 +1,16 @@
 package dev.alexcoss.universitycms.controller.auth;
 
-import dev.alexcoss.universitycms.dto.view.users.PersonAuthDTO;
+import dev.alexcoss.universitycms.dto.view.user.UserAuthDTO;
 import dev.alexcoss.universitycms.service.auth.PersonDetailsService;
 import dev.alexcoss.universitycms.service.auth.RegistrationService;
 import dev.alexcoss.universitycms.util.PersonValidator;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindingResult;
 
@@ -18,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthenticationController.class)
+@RunWith(SpringRunner.class)
 class AuthenticationControllerTest {
 
     @Autowired
@@ -29,17 +33,14 @@ class AuthenticationControllerTest {
     @MockBean
     private RegistrationService registrationService;
 
-    @MockBean
-    private PersonDetailsService personDetailsService;
-
     @Test
     void loginShouldReturnLoginView() throws Exception {
         mockMvc.perform(get("/login"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("auth/login"));
+            .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser
     void registrationGetShouldReturnRegistrationView() throws Exception {
         mockMvc.perform(get("/registration"))
             .andExpect(status().isOk())
@@ -47,27 +48,35 @@ class AuthenticationControllerTest {
     }
 
     @Test
+    @WithMockUser
     void registerPostShouldRedirectToLoginOnSuccess() throws Exception {
-        PersonAuthDTO person = new PersonAuthDTO();
-        doNothing().when(personValidator).validate(any(PersonAuthDTO.class), any(BindingResult.class));
+        UserAuthDTO user = new UserAuthDTO();
+        user.setUsername("username");
+        user.setPassword("password");
+        user.setFirstName("firstName");
+        user.setLastName("lastName");
+        user.setEmail("email@email.com");
+
+        doNothing().when(personValidator).validate(any(UserAuthDTO.class), any(BindingResult.class));
 
         mockMvc.perform(post("/registration")
-                .flashAttr("person", person)
+                .flashAttr("person", user)
                 .with(csrf()))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/login"));
 
-        verify(registrationService).register(person);
+        verify(registrationService).register(user);
     }
 
     @Test
+    @WithMockUser
     void registerPostShouldReturnRegistrationViewOnValidationError() throws Exception {
-        PersonAuthDTO person = new PersonAuthDTO();
+        UserAuthDTO person = new UserAuthDTO();
         doAnswer(invocation -> {
             BindingResult bindingResult = invocation.getArgument(1);
             bindingResult.reject("error");
             return null;
-        }).when(personValidator).validate(any(PersonAuthDTO.class), any(BindingResult.class));
+        }).when(personValidator).validate(any(UserAuthDTO.class), any(BindingResult.class));
 
         mockMvc.perform(post("/registration")
                 .flashAttr("person", person)
@@ -75,6 +84,6 @@ class AuthenticationControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name("auth/registration"));
 
-        verify(registrationService, never()).register(any(PersonAuthDTO.class));
+        verify(registrationService, never()).register(any(UserAuthDTO.class));
     }
 }

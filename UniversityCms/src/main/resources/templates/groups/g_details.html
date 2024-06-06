@@ -37,7 +37,7 @@
                 <div class="list-group mb-2" th:each="student : ${group.getStudents()}">
                     <a th:href="@{/students/{id}(id=${student.getId()})}"
                        class="list-group-item list-group-item-action"
-                       th:text="${'Student: ' + student.getFirstName() + ' ' + student.getLastName()}"></a>
+                       th:text="${'Student: ' + student.getUser().getFirstName() + ' ' + student.getUser().getLastName()}"></a>
                 </div>
 
 

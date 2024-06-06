@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
-import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.service.course.CourseProcessingService;
 import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,6 +34,7 @@ class CourseControllerTest {
     private TeacherServiceImpl teacherService;
 
     @Test
+    @WithMockUser
     public void testCourseDetails() throws Exception {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();;
@@ -46,6 +48,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testCourseDetailsNotFound() throws Exception {
         int courseId = 1;
 
@@ -57,6 +60,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void testEditCourse() throws Exception {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();
@@ -72,6 +76,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void testUpdateCourse() throws Exception {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();
@@ -87,6 +92,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void testDeleteCourse() throws Exception {
         int courseId = 1;
 

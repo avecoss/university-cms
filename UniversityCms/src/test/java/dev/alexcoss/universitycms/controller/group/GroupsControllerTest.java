@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
 import dev.alexcoss.universitycms.service.group.GroupProcessingService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

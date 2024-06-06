@@ -1,5 +1,6 @@
 package dev.alexcoss.universitycms.service.generator;
 
+import dev.alexcoss.universitycms.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,14 +13,14 @@ import java.util.Set;
 public class LoginPasswordGenerator {
 
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    public String generateStartingLogin(String firstName, String lastName, Set<String> existingLogins) {
-        int index = 1;
-        String login = loginGenerator(firstName, lastName, index);
+    public String generateStartingLogin(String firstName, String lastName) {
+        String login = loginGenerator(firstName, lastName);
+        Set<String> existingLogins = userService.findAllUsernames();
 
         while (existingLogins.contains(login)) {
-            login = loginGenerator(firstName, lastName, index);
-            index++;
+            login = loginGenerator(firstName, lastName);
         }
         return login;
     }
@@ -28,7 +29,7 @@ public class LoginPasswordGenerator {
         return passwordEncoder.encode("password");
     }
 
-    private String loginGenerator(String firstName, String lastName, int index) {
+    private String loginGenerator(String firstName, String lastName) {
         String baseLogin =  firstName.substring(0, Math.min(3, firstName.length())) +
             lastName.substring(0, Math.min(3, lastName.length())).toLowerCase();
 

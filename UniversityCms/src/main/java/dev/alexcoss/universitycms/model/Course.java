@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "students")
 @ToString(exclude = "students")
+@Builder
 @Entity
 @Table(name = "course", schema = "university")
 public class Course {
@@ -20,9 +21,9 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
-    private int id;
+    private Integer id;
 
-    @Column(name = "course_name")
+    @Column(name = "course_name", nullable = false)
     @NotEmpty(message = "{course.validation.not_empty}")
     @Size(min = 2, max = 100, message = "{course.validation.size}")
     private String name;
@@ -32,6 +33,7 @@ public class Course {
     private Teacher teacher;
 
     @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @Builder.Default
     private Set<Student> students = new HashSet<>();
 
     public void addStudent(Student student) {

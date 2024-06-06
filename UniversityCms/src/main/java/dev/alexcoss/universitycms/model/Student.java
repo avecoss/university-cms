@@ -10,17 +10,17 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "courses", callSuper = true)
-@ToString(exclude = "courses", callSuper = true)
-@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Entity
+@SuperBuilder
 @Table(name = "student", schema = "university")
-public class Student extends Person {
+public class Student extends Person{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

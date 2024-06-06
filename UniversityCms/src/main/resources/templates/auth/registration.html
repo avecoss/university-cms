@@ -35,6 +35,11 @@
                         <div class="form-text error_msg" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
                     </div>
                     <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+                    </div>
+                    <div class="mb-3">
                         <label for="username" class="form-label">Username:</label>
                         <input type="text" class="form-control" id="username" name="username" th:field="*{username}" required/>
                         <div class="form-text error_msg" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>

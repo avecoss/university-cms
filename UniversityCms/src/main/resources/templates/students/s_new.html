@@ -34,13 +34,13 @@
                 <form th:method="POST" th:action="@{/students}" th:object="${studentView}">
                     <div class="mb-3">
                         <label for="firstName" class="form-label">Student First Name:</label>
-                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter student's first name"/>
-                        <div class="form-text error_msg" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+                        <input type="text" class="form-control" id="firstName" th:field="*{user.firstName}" placeholder="Enter student's first name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.firstName')}" th:errors="*{user.firstName}">Name error</div>
                     </div>
                     <div class="mb-3">
                         <label for="lastName" class="form-label">Student Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter student's last name"/>
-                        <div class="form-text error_msg" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+                        <input type="text" class="form-control" id="lastName" th:field="*{user.lastName}" placeholder="Enter student's last name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.lastName')}" th:errors="*{user.lastName}">Name error</div>
                     </div>
 
                     <div class="mb-3">

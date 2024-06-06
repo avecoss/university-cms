@@ -34,13 +34,13 @@
                 <form th:method="PATCH" th:action="@{/teachers/{id}(id=${teacherView.getId()})}" th:object="${teacherView}">
                     <div class="mb-3">
                         <label for="firstName" class="form-label">Professor First Name:</label>
-                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter professor's first name"/>
-                        <div class="form-text error_msg" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
+                        <input type="text" class="form-control" id="firstName" th:field="*{user.firstName}" placeholder="Enter professor's first name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.firstName')}" th:errors="*{user.firstName}">First name error</div>
                     </div>
                     <div class="mb-3">
                         <label for="lastName" class="form-label">Student Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter professor's last name"/>
-                        <div class="form-text error_msg" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
+                        <input type="text" class="form-control" id="lastName" th:field="*{user.lastName}" placeholder="Enter professor's last name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.lastName')}" th:errors="*{user.lastName}">Last name error</div>
                     </div>
 
                     <div class="mb-3">

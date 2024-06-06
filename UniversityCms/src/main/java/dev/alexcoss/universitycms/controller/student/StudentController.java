@@ -2,8 +2,8 @@ package dev.alexcoss.universitycms.controller.student;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentEditCreateDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
 import dev.alexcoss.universitycms.service.course.CourseProcessingService;
 import dev.alexcoss.universitycms.service.group.GroupProcessingService;
 import dev.alexcoss.universitycms.service.student.StudentProcessingService;
@@ -43,9 +43,7 @@ public class StudentController {
 
     @PatchMapping
     public String updateStudent(@ModelAttribute("student") @Valid StudentEditCreateDTO student, BindingResult bindingResult,
-                                @PathVariable long id, @RequestParam Integer groupId,
-                                @RequestParam(value = "courseIds", required = false) List<Integer> courseIds,
-                                Locale locale, Model model) {
+                                @PathVariable long id, Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("groups", groupService.findAllGroups());
             return "students/s_edit";

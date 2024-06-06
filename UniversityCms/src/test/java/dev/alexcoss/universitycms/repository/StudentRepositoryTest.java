@@ -1,8 +1,10 @@
 package dev.alexcoss.universitycms.repository;
 
 import dev.alexcoss.universitycms.enumerated.Role;
+import dev.alexcoss.universitycms.model.Authority;
 import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Student;
+import dev.alexcoss.universitycms.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class StudentRepositoryTest {
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     public void testFindByCoursesName() {
@@ -52,8 +56,8 @@ public class StudentRepositoryTest {
 
         courseRepository.save(course);
 
-        Student student1 = getStudent("John", "Doe", "userJohn", "strongPass");
-        Student student2 = getStudent("Jane", "Bell", "user123", "password");
+        Student student1 = getStudent("John", "Doe", "userJohn", "strongPass", "email@email.com", Authority.builder().role(Role.STUDENT).build());
+        Student student2 = getStudent("Jane", "Bell", "user123", "password", "userl@email.com", Authority.builder().role(Role.STUDENT).build());
 
         course.addStudent(student1);
         course.addStudent(student2);
@@ -64,32 +68,43 @@ public class StudentRepositoryTest {
         List<Student> students = studentRepository.findByCoursesName(courseName);
 
         assertEquals(2, students.size());
-        assertEquals("John", students.get(0).getFirstName());
-        assertEquals("Jane", students.get(1).getFirstName());
+        assertEquals("John", students.get(0).getUser().getFirstName());
+        assertEquals("Jane", students.get(1).getUser().getFirstName());
     }
 
     @Test
-    public void testFindAllUsernames() {
-        Student student1 = getStudent("John", "Doe", "userJohn", "strongPass");
-        Student student2 = getStudent("Jane", "Bell", "user123", "password");
+    public void testFindAllByFirstNameStartingWith() {
+        Student student1 = getStudent("John", "Doe", "userJohn", "strongPass", "email@email.com", Authority.builder().role(Role.STUDENT).build());
+        Student student2 = getStudent("Jane", "Bell", "user123", "password", "user1@email.com", Authority.builder().role(Role.STUDENT).build());
+        Student student3 = getStudent("Jack", "Smith", "userJack", "pass1234", "user2@email.com", Authority.builder().role(Role.STUDENT).build());
+
         studentRepository.save(student1);
         studentRepository.save(student2);
+        studentRepository.save(student3);
 
-        Set<String> usernames = studentRepository.findAllUsernames();
+        List<Student> students = studentRepository.findAllByFirstNameStartingWith("J%");
 
-        assertEquals(2, usernames.size());
-        assertTrue(usernames.contains("userJohn"));
-        assertTrue(usernames.contains("user123"));
+        assertEquals(3, students.size());
+        assertTrue(students.stream().anyMatch(s -> s.getUser().getFirstName().equals("John")));
+        assertTrue(students.stream().anyMatch(s -> s.getUser().getFirstName().equals("Jane")));
+        assertTrue(students.stream().anyMatch(s -> s.getUser().getFirstName().equals("Jack")));
     }
 
 
-    private @NotNull Student getStudent(String firstName, String lastName, String username, String password) {
-        Student student = new Student();
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        student.setUsername(username);
-        student.setPassword(password);
-        student.setRole(Role.STUDENT);
-        return student;
+    private @NotNull Student getStudent(String firstName, String lastName, String username, String password, String email, Authority... authorities) {
+        User user = User.builder()
+            .firstName(firstName)
+            .lastName(lastName)
+            .username(username)
+            .password(password)
+            .email(email)
+            .authorities(Set.of(authorities))
+            .build();
+
+        user = userRepository.save(user);
+
+        return Student.builder()
+            .user(user)
+            .build();
     }
 }

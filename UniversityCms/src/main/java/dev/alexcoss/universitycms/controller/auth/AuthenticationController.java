@@ -1,6 +1,6 @@
 package dev.alexcoss.universitycms.controller.auth;
 
-import dev.alexcoss.universitycms.dto.view.users.PersonAuthDTO;
+import dev.alexcoss.universitycms.dto.view.user.UserAuthDTO;
 import dev.alexcoss.universitycms.service.auth.RegistrationService;
 import dev.alexcoss.universitycms.util.PersonValidator;
 import jakarta.validation.Valid;
@@ -26,12 +26,12 @@ public class AuthenticationController {
     }
 
     @GetMapping("/registration")
-    public String registration(@ModelAttribute("person") PersonAuthDTO person) {
+    public String registration(@ModelAttribute("person") UserAuthDTO person) {
         return "auth/registration";
     }
 
     @PostMapping("/registration")
-    public String register(@ModelAttribute("person") @Valid PersonAuthDTO person, BindingResult bindingResult) {
+    public String register(@ModelAttribute("person") @Valid UserAuthDTO person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
             return "auth/registration";

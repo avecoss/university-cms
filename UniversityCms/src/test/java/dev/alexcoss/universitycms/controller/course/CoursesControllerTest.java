@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
-import dev.alexcoss.universitycms.dto.view.users.TeacherViewDTO;
+import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.service.course.CourseProcessingService;
 import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;

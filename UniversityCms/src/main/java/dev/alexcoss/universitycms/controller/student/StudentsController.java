@@ -2,8 +2,8 @@ package dev.alexcoss.universitycms.controller.student;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentEditCreateDTO;
-import dev.alexcoss.universitycms.dto.view.users.StudentViewDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
+import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
 import dev.alexcoss.universitycms.service.course.CourseProcessingService;
 import dev.alexcoss.universitycms.service.group.GroupProcessingService;
 import dev.alexcoss.universitycms.service.student.StudentProcessingService;
