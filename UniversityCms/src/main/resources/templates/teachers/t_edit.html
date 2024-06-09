@@ -47,7 +47,7 @@
                         <label>Choose Courses:</label>
                         <div class="form-check" th:each="course : ${courses}">
                             <input class="form-check-input" type="checkbox" th:id="'course_' + ${course.id}" th:value="${course.id}"
-                                   th:checked="${teacherEdit.courseIds != null and teacherEdit.courseIds.contains(course.id)}" name="courseIds"/>
+                                   th:checked="${teacherEdit.courseIds != null and teacherView.courses.contains(course)}" name="courseIds"/>
                             <label class="form-check-label" th:for="'course_' + ${course.id}" th:text="${course.name}"></label>
                         </div>
                     </div>

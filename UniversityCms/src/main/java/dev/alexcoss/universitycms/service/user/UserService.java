@@ -4,14 +4,23 @@ import dev.alexcoss.universitycms.dto.view.user.UserDTO;
 import dev.alexcoss.universitycms.dto.view.user.UserEditDTO;
 import dev.alexcoss.universitycms.enumerated.Role;
 import dev.alexcoss.universitycms.model.Authority;
+import dev.alexcoss.universitycms.model.Student;
+import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.model.User;
 import dev.alexcoss.universitycms.repository.AuthorityRepository;
+import dev.alexcoss.universitycms.repository.StudentRepository;
+import dev.alexcoss.universitycms.repository.TeacherRepository;
 import dev.alexcoss.universitycms.repository.UserRepository;
+import dev.alexcoss.universitycms.service.student.StudentService;
+import dev.alexcoss.universitycms.service.student.StudentServiceImpl;
+import dev.alexcoss.universitycms.service.teacher.TeacherService;
+import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +36,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+    private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
@@ -46,17 +58,23 @@ public class UserService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateUserAuthority(Long id, List<Role> roles) {
         if (roles != null && !roles.isEmpty()) {
             userRepository.findById(id).ifPresent(user -> {
-                Set<Authority> authorities = roles.stream()
+                boolean isStudent = studentRepository.existsByUserId(id);
+                boolean isTeacher = teacherRepository.existsByUserId(id);
+
+                Set<Authority> newAuthorities = roles.stream()
                     .map(role -> authorityRepository.findByRole(role)
                         .orElseThrow(() -> new IllegalEntityException("Role not found: " + role.name())))
                     .collect(Collectors.toSet());
 
-                user.setAuthorities(authorities);
-
+                user.setAuthorities(newAuthorities);
                 userRepository.save(user);
+
+                checkAndDeleteRole(isStudent, isTeacher, newAuthorities, id);
+                checkAndAddRole(isStudent, isTeacher, newAuthorities, user);
             });
         }
     }
@@ -93,5 +111,29 @@ public class UserService {
         return userRepository.findById(id)
             .map(user -> modelMapper.map(user, UserDTO.class))
             .orElseThrow(() -> new EntityNotExistException("User with id " + id + " not found"));
+    }
+
+    private void checkAndDeleteRole(boolean isStudent, boolean isTeacher, Set<Authority> newAuthorities, Long userId) {
+        if (isStudent && newAuthorities.stream().noneMatch(auth -> auth.getRole().equals(Role.STUDENT))) {
+            studentRepository.deleteByUserId(userId);
+        }
+
+        if (isTeacher && newAuthorities.stream().noneMatch(auth -> auth.getRole().equals(Role.TEACHER))) {
+            teacherRepository.deleteByUserId(userId);
+        }
+    }
+
+    private void checkAndAddRole(boolean isStudent, boolean isTeacher, Set<Authority> newAuthorities, User user) {
+        if (!isStudent && newAuthorities.stream().anyMatch(auth -> auth.getRole().equals(Role.STUDENT))) {
+            studentRepository.save(Student.builder()
+                .user(user)
+                .build());
+        }
+
+        if (!isTeacher && newAuthorities.stream().anyMatch(auth -> auth.getRole().equals(Role.TEACHER))) {
+            teacherRepository.save(Teacher.builder()
+                .user(user)
+                .build());
+        }
     }
 }

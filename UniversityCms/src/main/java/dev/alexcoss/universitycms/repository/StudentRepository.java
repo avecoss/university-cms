@@ -22,4 +22,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         WHERE UPPER(s.user.firstName) LIKE :letter
         """)
     List<Student> findAllByFirstNameStartingWith(@Param("letter") String letter);
+
+    boolean existsByUserId(Long userId);
+
+    void deleteByUserId(Long userId);
 }

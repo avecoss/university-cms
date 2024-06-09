@@ -4,6 +4,7 @@ import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
 import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
 import dev.alexcoss.universitycms.model.Student;
 import dev.alexcoss.universitycms.repository.StudentRepository;
+import dev.alexcoss.universitycms.repository.UserRepository;
 import dev.alexcoss.universitycms.service.generator.StudentBuilder;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
@@ -24,7 +25,8 @@ import java.util.Locale;
 @Transactional(readOnly = true)
 public class StudentServiceImpl implements StudentProcessingService<StudentViewDTO, StudentEditCreateDTO> {
 
-    private final StudentRepository repository;
+    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final StudentBuilder studentBuilder;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
@@ -41,7 +43,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Override
     public List<StudentViewDTO> findStudentsByCourse(String courseName) {
-        List<Student> students = repository.findByCoursesName(courseName);
+        List<Student> students = studentRepository.findByCoursesName(courseName);
         return students.stream()
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
             .toList();
@@ -49,7 +51,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Override
     public List<StudentViewDTO> findAllStudents() {
-        List<Student> students = repository.findAll();
+        List<Student> students = studentRepository.findAll();
         return students.stream()
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
             .toList();
@@ -57,7 +59,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
     @Override
     public List<StudentViewDTO> findStudentsByFirstName(String name) {
-        List<Student> byFirstNameStartingWith = repository.findAllByFirstNameStartingWith(name);
+        List<Student> byFirstNameStartingWith = studentRepository.findAllByFirstNameStartingWith(name);
 
         return byFirstNameStartingWith.stream()
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
@@ -67,18 +69,24 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void saveStudent(StudentEditCreateDTO student) {
+    public void saveStudent(StudentEditCreateDTO studentDto) {
         Locale locale = LocaleContextHolder.getLocale();
-        isValidStudent(student, locale);
-        repository.save(studentBuilder.buildEntity(student));
+        isValidStudent(studentDto, locale);
+        Student student = studentBuilder.buildEntity(studentDto);
+
+        userRepository.save(student.getUser());
+        studentRepository.save(student);
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void saveStudent(StudentEditCreateDTO student, Locale locale) {
-        isValidStudent(student, locale);
-        repository.save(studentBuilder.buildEntity(student));
+    public void saveStudent(StudentEditCreateDTO studentDto, Locale locale) {
+        isValidStudent(studentDto, locale);
+        Student student = studentBuilder.buildEntity(studentDto);
+
+        userRepository.save(student.getUser());
+        studentRepository.save(student);
     }
 
     @Transactional
@@ -99,11 +107,11 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteStudentById(Long studentId) {
-        repository.findById(studentId)
+        studentRepository.findById(studentId)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("student.errors.not_found",
                 new Object[]{studentId}, "Student with ID {0} not found!", LocaleContextHolder.getLocale())));
 
-        repository.deleteById(studentId);
+        studentRepository.deleteById(studentId);
     }
 
     private void isValidStudent(StudentEditCreateDTO student, Locale locale) {
@@ -115,7 +123,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     }
 
     private StudentViewDTO getStudentDTO(Long id, Locale locale) {
-        return repository.findById(id)
+        return studentRepository.findById(id)
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("student.errors.not_found",
                 new Object[]{id}, "Student with ID {0} not found!", locale)));
@@ -126,7 +134,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
 
         Student buildStudent = studentBuilder.buildEntity(updated);
 
-        repository.findById(id)
+        studentRepository.findById(id)
             .map(student -> {
                 student.getUser().setFirstName(buildStudent.getUser().getFirstName());
                 student.getUser().setLastName(buildStudent.getUser().getLastName());

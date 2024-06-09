@@ -4,7 +4,7 @@ import dev.alexcoss.universitycms.dto.view.teacher.TeacherCreateEditDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.model.Teacher;
 import dev.alexcoss.universitycms.repository.TeacherRepository;
-import dev.alexcoss.universitycms.service.generator.LoginPasswordGenerator;
+import dev.alexcoss.universitycms.repository.UserRepository;
 import dev.alexcoss.universitycms.service.generator.TeacherBuilder;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
@@ -25,9 +25,9 @@ import java.util.Locale;
 @Transactional(readOnly = true)
 public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> {
 
-    private final TeacherRepository repository;
+    private final TeacherRepository teacherRepository;
+    private final UserRepository userRepository;
     private final TeacherBuilder teacherBuilder;
-    private final LoginPasswordGenerator loginPasswordGenerator;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
 
@@ -43,7 +43,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
     @Override
     public List<TeacherViewDTO> findAllTeachers() {
-        List<Teacher> teachers = repository.findAll();
+        List<Teacher> teachers = teacherRepository.findAll();
         return teachers.stream()
             .map(student -> modelMapper.map(student, TeacherViewDTO.class))
             .toList();
@@ -51,7 +51,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
     @Override
     public List<TeacherViewDTO> findTeachersByFirstName(String firstName) {
-        List<Teacher> byFirstNameStartingWith = repository.findAllByFirstNameStartingWith(firstName);
+        List<Teacher> byFirstNameStartingWith = teacherRepository.findAllByFirstNameStartingWith(firstName);
 
         return byFirstNameStartingWith.stream()
             .map(teacher -> modelMapper.map(teacher, TeacherViewDTO.class))
@@ -61,18 +61,24 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void saveTeacher(TeacherCreateEditDTO teacher, Locale locale) {
-        isValidTeacher(teacher, locale);
-        repository.save(teacherBuilder.buildEntity(teacher));
+    public void saveTeacher(TeacherCreateEditDTO teacherDto, Locale locale) {
+        isValidTeacher(teacherDto, locale);
+        Teacher teacher = teacherBuilder.buildEntity(teacherDto);
+
+        userRepository.save(teacher.getUser());
+        teacherRepository.save(teacher);
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void saveTeacher(TeacherCreateEditDTO teacher) {
+    public void saveTeacher(TeacherCreateEditDTO teacherDto) {
         Locale locale = LocaleContextHolder.getLocale();
-        isValidTeacher(teacher, locale);
-        repository.save(teacherBuilder.buildEntity(teacher));
+        isValidTeacher(teacherDto, locale);
+        Teacher teacher = teacherBuilder.buildEntity(teacherDto);
+
+        userRepository.save(teacher.getUser());
+        teacherRepository.save(teacher);
     }
 
     @Transactional
@@ -93,11 +99,11 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteTeacherById(Long teacherId) {
-        repository.findById(teacherId)
+        teacherRepository.findById(teacherId)
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("teacher.errors.not_found",
                 new Object[]{teacherId}, "Teacher with ID {0} not found!", LocaleContextHolder.getLocale())));
 
-        repository.deleteById(teacherId);
+        teacherRepository.deleteById(teacherId);
     }
 
     private void isValidTeacher(TeacherCreateEditDTO teacher, Locale locale) {
@@ -109,7 +115,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     }
 
     private TeacherViewDTO getTeacherDTO(Long id, Locale locale) {
-        return repository.findById(id)
+        return teacherRepository.findById(id)
             .map(teacher -> modelMapper.map(teacher, TeacherViewDTO.class))
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("teacher.errors.not_found",
                 new Object[]{id}, "Teacher with ID {0} not found!", locale)));
@@ -120,7 +126,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
 
         Teacher teacherWithCourses = teacherBuilder.buildEntity(updated);
 
-        repository.findById(id)
+        teacherRepository.findById(id)
             .map(teacher -> {
                 teacher.getUser().setFirstName(teacherWithCourses.getUser().getFirstName());
                 teacher.getUser().setLastName(teacherWithCourses.getUser().getLastName());
