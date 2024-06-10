@@ -65,7 +65,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findWithPaginationWithValidParameters() {
+    void getWithPaginationWithValidParameters() {
         int page = 1;
         int usersPerPage = 10;
         boolean sortByUsername = true;
@@ -83,7 +83,7 @@ class UserServiceTest {
 
         when(userRepository.findAll(pageable)).thenReturn(userPage);
 
-        Page<UserDTO> resultPage = userService.findWithPagination(page, usersPerPage, sortByUsername);
+        Page<UserDTO> resultPage = userService.getWithPagination(page, usersPerPage, sortByUsername);
 
         assertEquals(users.size(), resultPage.getContent().size());
         assertEquals(users.getFirst().getId(), resultPage.getContent().getFirst().getId());

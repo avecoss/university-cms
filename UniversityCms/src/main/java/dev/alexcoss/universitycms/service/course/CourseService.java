@@ -1,4 +1,16 @@
 package dev.alexcoss.universitycms.service.course;
 
-public interface CourseService {
+import java.util.List;
+import java.util.Locale;
+
+public interface CourseService<T>{
+
+    List<T> getAllCourses();
+    List<T> getCoursesByLetters(String letter);
+    T getCourseById(Integer id);
+    T getCourseById(Integer id, Locale locale);
+    List<T> getAllByIds(Iterable<Integer> ids);
+    void updateCourse(Integer id, T updated);
+    void saveCourse(T course);
+    void deleteCourseById(Integer id);
 }

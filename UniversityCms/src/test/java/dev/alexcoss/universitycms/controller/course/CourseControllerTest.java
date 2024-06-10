@@ -2,7 +2,7 @@ package dev.alexcoss.universitycms.controller.course;
 
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
-import dev.alexcoss.universitycms.service.course.CourseProcessingService;
+import dev.alexcoss.universitycms.service.course.CourseService;
 import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class CourseControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CourseProcessingService<CourseDTO> courseService;
+    private CourseService<CourseDTO> courseService;
 
     @MockBean
     private TeacherServiceImpl teacherService;
@@ -39,7 +39,7 @@ class CourseControllerTest {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();;
 
-        when(courseService.findCourseById(courseId)).thenReturn(courseDTO);
+        when(courseService.getCourseById(courseId)).thenReturn(courseDTO);
 
         mockMvc.perform(get("/courses/{id}", courseId))
             .andExpect(status().isOk())
@@ -52,7 +52,7 @@ class CourseControllerTest {
     public void testCourseDetailsNotFound() throws Exception {
         int courseId = 1;
 
-        doThrow(EntityNotExistException.class).when(courseService).findCourseById(1);
+        doThrow(EntityNotExistException.class).when(courseService).getCourseById(1);
 
         mockMvc.perform(get("/courses/{id}", courseId))
             .andExpect(status().isNotFound())
@@ -65,8 +65,8 @@ class CourseControllerTest {
         int courseId = 1;
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();
 
-        when(courseService.findCourseById(courseId)).thenReturn(courseDTO);
-        when(teacherService.findAllTeachers()).thenReturn(Collections.emptyList());
+        when(courseService.getCourseById(courseId)).thenReturn(courseDTO);
+        when(teacherService.getAllTeachers()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/courses/{id}/edit", courseId))
             .andExpect(status().isOk())
@@ -82,7 +82,7 @@ class CourseControllerTest {
         CourseDTO courseDTO = CourseDTO.builder().id(courseId).name("Mathematics").teacher(new TeacherViewDTO()).build();
         TeacherViewDTO teacherDTO = TeacherViewDTO.builder().id(1L).build();
 
-        when(teacherService.findTeacherById(1L)).thenReturn(teacherDTO);
+        when(teacherService.getTeacherById(1L)).thenReturn(teacherDTO);
 
         mockMvc.perform(patch("/courses/{id}", courseId)
                 .param("teacherId", "1")

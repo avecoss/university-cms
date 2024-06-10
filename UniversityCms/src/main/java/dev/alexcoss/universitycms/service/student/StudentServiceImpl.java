@@ -23,7 +23,7 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StudentServiceImpl implements StudentProcessingService<StudentViewDTO, StudentEditCreateDTO> {
+public class StudentServiceImpl implements StudentService<StudentViewDTO, StudentEditCreateDTO> {
 
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
@@ -32,17 +32,17 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     private final MessageSource messageSource;
 
     @Override
-    public StudentViewDTO findStudentById(Long id) {
+    public StudentViewDTO getStudentById(Long id) {
         return getStudentDTO(id, LocaleContextHolder.getLocale());
     }
 
     @Override
-    public StudentViewDTO findStudentById(Long id, Locale locale) {
+    public StudentViewDTO getStudentById(Long id, Locale locale) {
         return getStudentDTO(id, locale);
     }
 
     @Override
-    public List<StudentViewDTO> findStudentsByCourse(String courseName) {
+    public List<StudentViewDTO> getStudentsByCourse(String courseName) {
         List<Student> students = studentRepository.findByCoursesName(courseName);
         return students.stream()
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     }
 
     @Override
-    public List<StudentViewDTO> findAllStudents() {
+    public List<StudentViewDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
         return students.stream()
             .map(student -> modelMapper.map(student, StudentViewDTO.class))
@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     }
 
     @Override
-    public List<StudentViewDTO> findStudentsByFirstName(String name) {
+    public List<StudentViewDTO> getStudentsByFirstName(String name) {
         List<Student> byFirstNameStartingWith = studentRepository.findAllByFirstNameStartingWith(name);
 
         return byFirstNameStartingWith.stream()
@@ -93,14 +93,14 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateStudent(Long id, StudentEditCreateDTO updated) {
-        updated(id, updated, LocaleContextHolder.getLocale());
+        applyEntityUpdates(id, updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void updateStudent(Long id, StudentEditCreateDTO updated, Locale locale) {
-        updated(id, updated, locale);
+        applyEntityUpdates(id, updated, locale);
     }
 
     @Transactional
@@ -129,7 +129,7 @@ public class StudentServiceImpl implements StudentProcessingService<StudentViewD
                 new Object[]{id}, "Student with ID {0} not found!", locale)));
     }
 
-    private void updated(Long id, StudentEditCreateDTO updated, Locale locale) {
+    private void applyEntityUpdates(Long id, StudentEditCreateDTO updated, Locale locale) {
         isValidStudent(updated, locale);
 
         Student buildStudent = studentBuilder.buildEntity(updated);

@@ -3,8 +3,8 @@ package dev.alexcoss.universitycms.controller.teacher;
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherCreateEditDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
-import dev.alexcoss.universitycms.service.course.CourseProcessingService;
-import dev.alexcoss.universitycms.service.teacher.TeacherProcessingService;
+import dev.alexcoss.universitycms.service.course.CourseService;
+import dev.alexcoss.universitycms.service.teacher.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,20 +20,20 @@ import java.util.Locale;
 @RequestMapping("/teachers/{id}")
 public class TeacherController {
 
-    private final TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
-    private final CourseProcessingService<CourseDTO> courseService;
+    private final TeacherService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
+    private final CourseService<CourseDTO> courseService;
 
     @GetMapping
     public String teacherDetails(@PathVariable("id") long id, Model model, Locale locale) {
-        model.addAttribute("teacherView", teacherService.findTeacherById(id, locale));
+        model.addAttribute("teacherView", teacherService.getTeacherById(id, locale));
         return "teachers/t_details";
     }
 
     @GetMapping("/edit")
     public String editTeacher(@PathVariable("id") long id, Model model, Locale locale) {
-        model.addAttribute("teacherView", teacherService.findTeacherById(id, locale));
+        model.addAttribute("teacherView", teacherService.getTeacherById(id, locale));
         model.addAttribute("teacherEdit", new TeacherCreateEditDTO());
-        model.addAttribute("courses", courseService.findAllCourses());
+        model.addAttribute("courses", courseService.getAllCourses());
 
         return "teachers/t_edit";
     }
@@ -43,7 +43,7 @@ public class TeacherController {
                                 @PathVariable long id, @RequestParam(value = "courseIds", required = false) List<Integer> courseIds,
                                 Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("courses", courseService.findAllCourses());
+            model.addAttribute("courses", courseService.getAllCourses());
             return "teachers/t_edit";
         }
         teacher.setCourseIds(courseIds);

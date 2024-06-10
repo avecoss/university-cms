@@ -17,7 +17,7 @@ public class LoginPasswordGenerator {
 
     public String generateStartingLogin(String firstName, String lastName) {
         String login = loginGenerator(firstName, lastName);
-        Set<String> existingLogins = userService.findAllUsernames();
+        Set<String> existingLogins = userService.getAllUsernames();
 
         while (existingLogins.contains(login)) {
             login = loginGenerator(firstName, lastName);

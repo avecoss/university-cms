@@ -2,7 +2,7 @@ package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
 import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
-import dev.alexcoss.universitycms.service.group.GroupProcessingService;
+import dev.alexcoss.universitycms.service.group.GroupService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class GroupsControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GroupProcessingService<GroupDTO> groupService;
+    private GroupService<GroupDTO> groupService;
 
     @Test
     public void testGroups() throws Exception {
@@ -40,7 +40,7 @@ class GroupsControllerTest {
         groups.add(new GroupDTO(1, "AA-123", studentsForGroup));
         groups.add(new GroupDTO(2, "BB-11", studentsForGroup));
 
-        when(groupService.findAllGroups()).thenReturn(groups);
+        when(groupService.getAllGroups()).thenReturn(groups);
 
         mockMvc.perform(get("/groups"))
             .andExpect(status().isOk())

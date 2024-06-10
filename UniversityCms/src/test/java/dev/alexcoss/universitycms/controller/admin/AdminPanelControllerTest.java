@@ -40,7 +40,7 @@ class AdminPanelControllerTest {
         );
         Page<UserDTO> userPage = new PageImpl<>(userDTOList);
 
-        given(userService.findWithPagination(anyInt(), anyInt(), anyBoolean())).willReturn(userPage);
+        given(userService.getWithPagination(anyInt(), anyInt(), anyBoolean())).willReturn(userPage);
 
         mockMvc.perform(get("/admin"))
             .andExpect(status().isOk())
@@ -58,7 +58,7 @@ class AdminPanelControllerTest {
         );
         Page<UserDTO> userPage = new PageImpl<>(userDTOList);
 
-        given(userService.findWithPagination(anyInt(), anyInt(), anyBoolean())).willReturn(userPage);
+        given(userService.getWithPagination(anyInt(), anyInt(), anyBoolean())).willReturn(userPage);
 
         mockMvc.perform(get("/admin"))
             .andExpect(status().is4xxClientError());
@@ -75,7 +75,7 @@ class AdminPanelControllerTest {
 
         userDTO.setAuthorities(userAuthorities);
 
-        given(userService.findUserById(anyLong())).willReturn(userDTO);
+        given(userService.getUserById(anyLong())).willReturn(userDTO);
 
         mockMvc.perform(get("/admin/users/{id}/role", 1L))
             .andExpect(status().isOk())

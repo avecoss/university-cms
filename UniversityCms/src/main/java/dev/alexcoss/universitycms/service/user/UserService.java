@@ -11,10 +11,6 @@ import dev.alexcoss.universitycms.repository.AuthorityRepository;
 import dev.alexcoss.universitycms.repository.StudentRepository;
 import dev.alexcoss.universitycms.repository.TeacherRepository;
 import dev.alexcoss.universitycms.repository.UserRepository;
-import dev.alexcoss.universitycms.service.student.StudentService;
-import dev.alexcoss.universitycms.service.student.StudentServiceImpl;
-import dev.alexcoss.universitycms.service.teacher.TeacherService;
-import dev.alexcoss.universitycms.service.teacher.TeacherServiceImpl;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +79,7 @@ public class UserService {
         return userRepository.findByUsername(username).isPresent();
     }
 
-    public Set<String> findAllUsernames() {
+    public Set<String> getAllUsernames() {
         return userRepository.findAllUsernames();
     }
 
@@ -96,7 +92,7 @@ public class UserService {
             .toList();
     }
 
-    public Page<UserDTO> findWithPagination(Integer page, Integer usersPerPage, boolean sortByUsername) {
+    public Page<UserDTO> getWithPagination(Integer page, Integer usersPerPage, boolean sortByUsername) {
         Pageable pageable = PageRequest.of(page - 1, usersPerPage, sortByUsername ? Sort.by("username") : Sort.unsorted());
         Page<User> userPage = userRepository.findAll(pageable);
 
@@ -107,7 +103,7 @@ public class UserService {
         return new PageImpl<>(userDTOs, pageable, userPage.getTotalElements());
     }
 
-    public UserDTO findUserById(Long id) {
+    public UserDTO getUserById(Long id) {
         return userRepository.findById(id)
             .map(user -> modelMapper.map(user, UserDTO.class))
             .orElseThrow(() -> new EntityNotExistException("User with id " + id + " not found"));

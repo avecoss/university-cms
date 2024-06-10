@@ -2,7 +2,7 @@ package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
-import dev.alexcoss.universitycms.service.group.GroupProcessingService;
+import dev.alexcoss.universitycms.service.group.GroupService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class GroupControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GroupProcessingService<GroupDTO> groupService;
+    private GroupService<GroupDTO> groupService;
 
 
     @Test
@@ -33,7 +33,7 @@ class GroupControllerTest {
         int groupId = 1;
         GroupDTO groupDTO = GroupDTO.builder().id(groupId).name("AA-123").students(new ArrayList<>()).build();
 
-        when(groupService.findGroupById(groupId)).thenReturn(groupDTO);
+        when(groupService.getGroupById(groupId)).thenReturn(groupDTO);
 
         mockMvc.perform(get("/groups/{id}", groupId))
             .andExpect(status().isOk())
@@ -45,7 +45,7 @@ class GroupControllerTest {
     public void testGroupDetailsNotFound() throws Exception {
         int groupId = 1;
 
-        doThrow(EntityNotExistException.class).when(groupService).findGroupById(1);
+        doThrow(EntityNotExistException.class).when(groupService).getGroupById(1);
 
         mockMvc.perform(get("/groups/{id}", groupId))
             .andExpect(status().isNotFound())
@@ -72,7 +72,7 @@ class GroupControllerTest {
         int groupId = 1;
         GroupDTO groupDTO = GroupDTO.builder().id(groupId).name("AA-123").students(new ArrayList<>()).build();
 
-        when(groupService.findGroupById(groupId)).thenReturn(groupDTO);
+        when(groupService.getGroupById(groupId)).thenReturn(groupDTO);
 
         mockMvc.perform(get("/groups/{id}/edit", groupId))
             .andExpect(status().isOk())

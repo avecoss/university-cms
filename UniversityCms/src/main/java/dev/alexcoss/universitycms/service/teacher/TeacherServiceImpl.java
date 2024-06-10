@@ -23,7 +23,7 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> {
+public class TeacherServiceImpl implements TeacherService<TeacherViewDTO, TeacherCreateEditDTO> {
 
     private final TeacherRepository teacherRepository;
     private final UserRepository userRepository;
@@ -32,17 +32,17 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     private final MessageSource messageSource;
 
     @Override
-    public TeacherViewDTO findTeacherById(Long id, Locale locale) {
+    public TeacherViewDTO getTeacherById(Long id, Locale locale) {
         return getTeacherDTO(id, locale);
     }
 
     @Override
-    public TeacherViewDTO findTeacherById(Long id) {
+    public TeacherViewDTO getTeacherById(Long id) {
         return getTeacherDTO(id, LocaleContextHolder.getLocale());
     }
 
     @Override
-    public List<TeacherViewDTO> findAllTeachers() {
+    public List<TeacherViewDTO> getAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
         return teachers.stream()
             .map(student -> modelMapper.map(student, TeacherViewDTO.class))
@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     }
 
     @Override
-    public List<TeacherViewDTO> findTeachersByFirstName(String firstName) {
+    public List<TeacherViewDTO> getTeachersByFirstName(String firstName) {
         List<Teacher> byFirstNameStartingWith = teacherRepository.findAllByFirstNameStartingWith(firstName);
 
         return byFirstNameStartingWith.stream()
@@ -85,14 +85,14 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated) {
-        updated(id, updated, LocaleContextHolder.getLocale());
+        applyEntityUpdates(id, updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void updateTeacher(Long id, TeacherCreateEditDTO updated, Locale locale) {
-        updated(id, updated, locale);
+        applyEntityUpdates(id, updated, locale);
     }
 
     @Transactional
@@ -121,7 +121,7 @@ public class TeacherServiceImpl implements TeacherProcessingService<TeacherViewD
                 new Object[]{id}, "Teacher with ID {0} not found!", locale)));
     }
 
-    private void updated(Long id, TeacherCreateEditDTO updated, Locale locale) {
+    private void applyEntityUpdates(Long id, TeacherCreateEditDTO updated, Locale locale) {
         isValidTeacher(updated, locale);
 
         Teacher teacherWithCourses = teacherBuilder.buildEntity(updated);

@@ -20,14 +20,14 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CourseServiceImpl implements CourseProcessingService<CourseDTO> {
+public class CourseServiceImpl implements CourseService<CourseDTO> {
 
     private final CourseRepository repository;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
 
     @Override
-    public List<CourseDTO> findAllCourses() {
+    public List<CourseDTO> getAllCourses() {
         List<Course> courses = repository.findAll();
 
         return courses.stream()
@@ -36,7 +36,7 @@ public class CourseServiceImpl implements CourseProcessingService<CourseDTO> {
     }
 
     @Override
-    public List<CourseDTO> findCoursesByLetters(String letter) {
+    public List<CourseDTO> getCoursesByLetters(String letter) {
         List<Course> allByNameStartingWith = repository.findAllByNameStartingWith(letter);
 
         return allByNameStartingWith.stream()
@@ -45,17 +45,17 @@ public class CourseServiceImpl implements CourseProcessingService<CourseDTO> {
     }
 
     @Override
-    public CourseDTO findCourseById(Integer id, Locale locale) {
+    public CourseDTO getCourseById(Integer id, Locale locale) {
         return getCourseDTO(id, locale);
     }
 
     @Override
-    public CourseDTO findCourseById(Integer id) {
+    public CourseDTO getCourseById(Integer id) {
         return getCourseDTO(id, LocaleContextHolder.getLocale());
     }
 
     @Override
-    public List<CourseDTO> findAllByIds(Iterable<Integer> ids) {
+    public List<CourseDTO> getAllByIds(Iterable<Integer> ids) {
         List<Course> coursesByIds = repository.findAllById(ids);
 
         return coursesByIds.stream()

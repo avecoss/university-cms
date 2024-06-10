@@ -30,7 +30,7 @@ public class AdminPanelController {
         model.addAttribute("usersPerPage", usersPerPage);
         model.addAttribute("sortByUsername", sortByUsername);
 
-        Page<UserDTO> userPage = userService.findWithPagination(page, usersPerPage, sortByUsername);
+        Page<UserDTO> userPage = userService.getWithPagination(page, usersPerPage, sortByUsername);
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("totalPages", userPage.getTotalPages());
 
@@ -39,7 +39,7 @@ public class AdminPanelController {
 
     @GetMapping("/users/{id}/role")
     public String adminPanelRole(Model model, @PathVariable long id) {
-        UserDTO user = userService.findUserById(id);
+        UserDTO user = userService.getUserById(id);
         List<Role> userRoles = user.getAuthorities().stream()
             .map(AuthorityDTO::getRole)
             .toList();

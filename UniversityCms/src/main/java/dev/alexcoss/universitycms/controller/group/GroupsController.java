@@ -1,7 +1,7 @@
 package dev.alexcoss.universitycms.controller.group;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
-import dev.alexcoss.universitycms.service.group.GroupProcessingService;
+import dev.alexcoss.universitycms.service.group.GroupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/groups")
 public class GroupsController {
 
-    private final GroupProcessingService<GroupDTO> groupService;
+    private final GroupService<GroupDTO> groupService;
 
     @GetMapping
     public String groups(Model model, @RequestParam(value = "search_query", required = false) String searchQuery) {
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            model.addAttribute("groups", groupService.findGroupsByLetters(searchQuery));
+            model.addAttribute("groups", groupService.getGroupsByLetters(searchQuery));
         } else {
-            model.addAttribute("groups", groupService.findAllGroups());
+            model.addAttribute("groups", groupService.getAllGroups());
         }
         return "groups/g_list";
     }

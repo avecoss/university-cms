@@ -6,8 +6,8 @@ import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
 import dev.alexcoss.universitycms.dto.view.user.UserDTO;
 import dev.alexcoss.universitycms.enumerated.Role;
 import dev.alexcoss.universitycms.model.*;
-import dev.alexcoss.universitycms.service.course.CourseProcessingService;
-import dev.alexcoss.universitycms.service.group.GroupProcessingService;
+import dev.alexcoss.universitycms.service.course.CourseService;
+import dev.alexcoss.universitycms.service.group.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class StudentBuilder implements EntityBuilder<Student, StudentEditCreateDTO> {
 
     private final ModelMapper modelMapper;
-    private final CourseProcessingService<CourseDTO> courseService;
-    private final GroupProcessingService<GroupDTO> groupService;
+    private final CourseService<CourseDTO> courseService;
+    private final GroupService<GroupDTO> groupService;
     private final UserFactory userFactory;
 
     @Override
@@ -39,24 +39,20 @@ public class StudentBuilder implements EntityBuilder<Student, StudentEditCreateD
     }
 
     private void updateCourses(Student student, List<Integer> courseIds) {
-        List<CourseDTO> coursesDTO = courseService.findAllByIds(courseIds);
+        List<CourseDTO> coursesDTO = courseService.getAllByIds(courseIds);
         Set<Course> newCourses = coursesDTO.stream()
             .map(courseDTO -> modelMapper.map(courseDTO, Course.class))
             .collect(Collectors.toSet());
 
         if (student.getCourses() != null || !student.getCourses().isEmpty()) {
-            for (Course course : student.getCourses()) {
-                if (!newCourses.contains(course)) {
-                    student.removeCourse(course);
-                }
-            }
+            student.getCourses().removeIf(course -> !newCourses.contains(course));
         }
         newCourses.forEach(student::addCourse);
     }
 
     private void updateGroup(Student student, Integer groupId) {
         if (groupId != null) {
-            Group group = modelMapper.map(groupService.findGroupById(groupId), Group.class);
+            Group group = modelMapper.map(groupService.getGroupById(groupId), Group.class);
             Group oldGroup = student.getGroup();
             if (oldGroup != null) {
                 student.removeGroup(oldGroup);

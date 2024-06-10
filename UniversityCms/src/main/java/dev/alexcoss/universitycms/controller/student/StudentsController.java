@@ -4,9 +4,9 @@ import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
 import dev.alexcoss.universitycms.dto.view.student.StudentEditCreateDTO;
 import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
-import dev.alexcoss.universitycms.service.course.CourseProcessingService;
-import dev.alexcoss.universitycms.service.group.GroupProcessingService;
-import dev.alexcoss.universitycms.service.student.StudentProcessingService;
+import dev.alexcoss.universitycms.service.course.CourseService;
+import dev.alexcoss.universitycms.service.group.GroupService;
+import dev.alexcoss.universitycms.service.student.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,16 +22,16 @@ import java.util.Locale;
 @RequestMapping("/students")
 public class StudentsController {
 
-    private final StudentProcessingService<StudentViewDTO, StudentEditCreateDTO> studentService;
-    private final GroupProcessingService<GroupDTO> groupService;
-    private final CourseProcessingService<CourseDTO> courseService;
+    private final StudentService<StudentViewDTO, StudentEditCreateDTO> studentService;
+    private final GroupService<GroupDTO> groupService;
+    private final CourseService<CourseDTO> courseService;
 
     @GetMapping
     public String students(Model model, @RequestParam(value = "search_query", required = false) String searchQuery) {
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            model.addAttribute("studentsView", studentService.findStudentsByFirstName(searchQuery));
+            model.addAttribute("studentsView", studentService.getStudentsByFirstName(searchQuery));
         } else {
-            model.addAttribute("studentsView", studentService.findAllStudents());
+            model.addAttribute("studentsView", studentService.getAllStudents());
         }
         return "students/s_list";
     }
@@ -40,8 +40,8 @@ public class StudentsController {
     public String newStudent(Model model) {
         model.addAttribute("studentView", new StudentViewDTO());
         model.addAttribute("studentCreate", new StudentEditCreateDTO());
-        model.addAttribute("groups", groupService.findAllGroups());
-        model.addAttribute("courses", courseService.findAllCourses());
+        model.addAttribute("groups", groupService.getAllGroups());
+        model.addAttribute("courses", courseService.getAllCourses());
         return "students/s_new";
     }
 
@@ -52,8 +52,8 @@ public class StudentsController {
                                 Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("studentView", new StudentViewDTO());
-            model.addAttribute("groups", groupService.findAllGroups());
-            model.addAttribute("courses", courseService.findAllCourses());
+            model.addAttribute("groups", groupService.getAllGroups());
+            model.addAttribute("courses", courseService.getAllCourses());
             return "students/s_new";
         }
 

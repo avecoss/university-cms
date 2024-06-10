@@ -3,8 +3,8 @@ package dev.alexcoss.universitycms.controller.course;
 import dev.alexcoss.universitycms.dto.view.CourseDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherCreateEditDTO;
 import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
-import dev.alexcoss.universitycms.service.course.CourseProcessingService;
-import dev.alexcoss.universitycms.service.teacher.TeacherProcessingService;
+import dev.alexcoss.universitycms.service.course.CourseService;
+import dev.alexcoss.universitycms.service.teacher.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,19 +20,19 @@ import java.util.Locale;
 @RequestMapping("/courses/{id}")
 public class CourseController {
 
-    private final CourseProcessingService<CourseDTO> courseService;
-    private final TeacherProcessingService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
+    private final CourseService<CourseDTO> courseService;
+    private final TeacherService<TeacherViewDTO, TeacherCreateEditDTO> teacherService;
 
     @GetMapping
     public String courseDetails(@PathVariable("id") int id, Model model, Locale locale) {
-        model.addAttribute("course", courseService.findCourseById(id, locale));
+        model.addAttribute("course", courseService.getCourseById(id, locale));
         return "courses/c_details";
     }
 
     @GetMapping("/edit")
     public String editCourse(@PathVariable("id") int id, Model model, Locale locale) {
-        model.addAttribute("course", courseService.findCourseById(id, locale));
-        model.addAttribute("teachers", teacherService.findAllTeachers());
+        model.addAttribute("course", courseService.getCourseById(id, locale));
+        model.addAttribute("teachers", teacherService.getAllTeachers());
         return "courses/c_edit";
     }
 
@@ -40,11 +40,11 @@ public class CourseController {
     public String updateCourse(@ModelAttribute("course") @Valid CourseDTO course, BindingResult bindingResult,
                                @PathVariable int id, @RequestParam Long teacherId, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("teachers", teacherService.findAllTeachers());
+            model.addAttribute("teachers", teacherService.getAllTeachers());
             return "courses/c_edit";
         }
 
-        course.setTeacher(teacherService.findTeacherById(teacherId));
+        course.setTeacher(teacherService.getTeacherById(teacherId));
 
         courseService.updateCourse(id, course);
         return "redirect:/courses";

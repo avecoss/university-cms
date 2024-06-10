@@ -18,14 +18,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
+public class GroupServiceImpl implements GroupService<GroupDTO> {
 
     private final GroupRepository repository;
     private final ModelMapper modelMapper;
     private final MessageSource messageSource;
 
     @Override
-    public List<GroupDTO> findAllGroups() {
+    public List<GroupDTO> getAllGroups() {
         List<Group> groups = repository.findAll();
 
         return groups.stream()
@@ -34,7 +34,7 @@ public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
     }
 
     @Override
-    public List<GroupDTO> findGroupsByLetters(String letter) {
+    public List<GroupDTO> getGroupsByLetters(String letter) {
         List<Group> allByNameStartingWith = repository.findAllByNameStartingWith(letter);
 
         return allByNameStartingWith.stream()
@@ -43,7 +43,7 @@ public class GroupServiceImpl implements GroupProcessingService<GroupDTO> {
     }
 
     @Override
-    public GroupDTO findGroupById(Integer id) {
+    public GroupDTO getGroupById(Integer id) {
         return repository.findById(id)
             .map(group -> modelMapper.map(group, GroupDTO.class))
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",
