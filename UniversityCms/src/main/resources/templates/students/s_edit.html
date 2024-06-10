@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+<section class="title">
+    <div class="background_title">
+        <div class="container">
+            <h2 class="text-center">Student</h2>
+        </div>
+    </div>
+</section>
+
+<section class="edit_student">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Edit Student</h5>
+            </div>
+            <div class="card-body">
+                <form th:method="PATCH" th:action="@{/students/{id}(id=${studentView.getId()})}" th:object="${studentView}">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Student First Name:</label>
+                        <input type="text" class="form-control" id="firstName" th:field="*{user.firstName}" placeholder="Enter student's first name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.firstName')}" th:errors="*{user.firstName}">Name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Student Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" th:field="*{user.lastName}" placeholder="Enter student's last name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.lastName')}" th:errors="*{user.lastName}">Name error</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="groups" class="form-label">Group:</label>
+                        <select class="form-select" id="groups" name="groupId">
+                            <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}" th:selected="${studentView.group != null and group.id == studentView.group.id}"></option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Choose Courses:</label>
+                        <div class="form-check" th:each="course : ${courses}">
+                            <input class="form-check-input" type="checkbox" th:id="'course_' + ${course.id}" th:value="${course.id}"
+                                   th:checked="${studentEdite.courseIds != null and studentView.courses.contains(course)}" name="courseIds"/>
+                            <label class="form-check-label" th:for="'course_' + ${course.id}" th:text="${course.name}"></label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+<section class="title">
+    <div class="background_title">
+        <div class="container">
+            <h2 class="text-center">Professor</h2>
+        </div>
+    </div>
+</section>
+
+<section class="new_professor">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Create New Professor</h5>
+            </div>
+            <div class="card-body">
+                <form th:method="POST" th:action="@{/teachers}" th:object="${teacherView}">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Professor First Name:</label>
+                        <input type="text" class="form-control" id="firstName" th:field="*{user.firstName}" placeholder="Enter professor's first name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.firstName')}" th:errors="*{user.firstName}">First name error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Student Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" th:field="*{user.lastName}" placeholder="Enter professor's last name"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('user.lastName')}" th:errors="*{user.lastName}">Last name error</div>
+                    </div>
+<!--                    <div class="mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="Enter username"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter password"/>
+                        <div class="form-text error_msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+                    </div>-->
+
+                    <div class="mb-3">
+                        <label>Choose Courses:</label>
+                        <div class="form-check" th:each="course : ${courses}">
+                            <input class="form-check-input" type="checkbox" th:id="'course_' + ${course.id}" th:value="${course.id}"
+                                   th:checked="${teacherCreate.courseIds != null and teacherCreate.courseIds.contains(course.id)}" name="courseIds"/>
+                            <label class="form-check-label" th:for="'course_' + ${course.id}" th:text="${course.name}"></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
+</body>
+</html>

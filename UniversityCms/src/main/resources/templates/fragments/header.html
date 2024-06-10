@@ -1,0 +1,43 @@
+<header xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <nav>
+        <div class="container">
+            <ul class="menu">
+                <li class="menu_item"><a href="/home" class="menu_link">Home</a></li>
+                <li class="menu_item"><a href="/courses" class="menu_link">Courses</a></li>
+                <li class="menu_item"><a href="/groups" class="menu_link">Groups</a></li>
+                <li class="menu_item"><a href="/students" class="menu_link">Students</a></li>
+                <li class="menu_item"><a href="/teachers" class="menu_link">Professors</a></li>
+                <li class="menu_item"><a href="#" class="menu_link">Contact</a></li>
+                <li class="menu_item" sec:authorize="hasRole('ADMIN')" ><a href="/admin" class="menu_link">Admin Panel</a></li>
+
+                <li class="menu_item menu_item_login">
+                    <div th:unless="${#authentication.getName() == 'anonymousUser'}" class="dropdown">
+                        <a class="menu_link dropdown-toggle px-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span th:text="${#authentication.getName()}" class="menu_link_text">User</span>
+                            <div class="user-avatar">
+                                <span th:text="${#authentication.getName().substring(0, 1).toUpperCase()}">#</span>
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/details">Details</a></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:if="${#authentication.getName() == 'anonymousUser'}">
+                        <a href="/login" class="menu_link">
+                            <span class="menu_link_text">Log In</span>
+                            <img src="/icons/account.png" alt="logo">
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

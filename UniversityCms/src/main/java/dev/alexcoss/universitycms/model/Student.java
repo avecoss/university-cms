@@ -1,0 +1,57 @@
+package dev.alexcoss.universitycms.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Entity
+@SuperBuilder
+@Table(name = "student", schema = "university")
+public class Student extends Person{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+        name = "student_course", schema = "university",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
+
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.getStudents().remove(this);
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+        group.getStudents().add(this);
+    }
+
+    public void removeGroup(Group group) {
+        this.group = null;
+        group.getStudents().remove(this);
+    }
+}

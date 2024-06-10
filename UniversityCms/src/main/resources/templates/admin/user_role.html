@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University</title>
+    <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/header.html :: header}"></div>
+
+<section class="admin">
+    <div class="container mt-5">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h4 th:text="${user.firstName} + ' ' + ${user.lastName}"></h4>
+            </div>
+            <div class="card-body">
+                <form th:method="PATCH" th:action="@{/admin/users/{id}(id=${user.id})}">
+                    <label>Authorities:</label>
+
+                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group" th:each="role : ${T(dev.alexcoss.universitycms.enumerated.Role).values()}">
+                        <input type="checkbox" class="btn-check" th:id="'role_' + ${role.name()}" th:value="${role}" name="roles" autocomplete="off" th:checked="${userRoles.contains(role)}">
+                        <label class="btn btn-outline-primary" th:for="'role_' + ${role.name()}" th:text="${role.name()}"></label>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/scripts.html :: div.scripts}"></div>
+</body>
+</html>

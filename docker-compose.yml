@@ -1,0 +1,21 @@
+name: u-cms
+
+services:
+
+    db_pg:
+        image: postgres:16-alpine
+        restart: always
+        environment:
+            POSTGRES_DB: university_db
+            POSTGRES_USER: adminer
+            POSTGRES_PASSWORD: 1111
+        ports:
+            - "5433:5432"
+        container_name: "db-pg"
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8090:8080
+        container_name: "adminer"
