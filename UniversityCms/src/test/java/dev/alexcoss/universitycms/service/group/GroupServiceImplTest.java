@@ -6,10 +6,12 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
+import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Group;
 import dev.alexcoss.universitycms.repository.GroupRepository;
 
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -72,6 +74,15 @@ class GroupServiceImplTest {
         groupService.saveGroup(groupDTO);
 
         verify(repository, times(1)).save(group);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void saveGroupWithInvalidGroup() {
+        GroupDTO groupDTO = new GroupDTO();
+
+        assertThrows(IllegalEntityException.class, () -> groupService.saveGroup(groupDTO));
+        verify(repository, never()).save(any(Group.class));
     }
 
     @Test

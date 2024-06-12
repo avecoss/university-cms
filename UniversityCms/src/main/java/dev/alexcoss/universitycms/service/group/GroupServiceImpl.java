@@ -60,7 +60,7 @@ public class GroupServiceImpl implements GroupService<GroupDTO> {
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
     public void updateGroup(Integer id, GroupDTO updated) {
         isValidGroup(updated);
 
