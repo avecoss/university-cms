@@ -2,7 +2,7 @@
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>[[${course.getName()}]]</title>
+    <title th:text="${course.getName()}">University</title>
     <link rel="icon" href="/icons/logo.svg" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a sec:authorize="hasRole('ADMIN')"  th:href="@{/courses/{id}/edit(id=${course.getId()})}" class="btn btn-secondary me-2">Edit Course</a>
+                    <a sec:authorize="hasRole('ADMIN') or hasRole('STUFF')"  th:href="@{/courses/{id}/edit(id=${course.getId()})}" class="btn btn-secondary me-2">Edit Course</a>
                     <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{/courses/{id}(id=${course.getId()})}">
                         <button type="submit" class="btn btn-danger">Delete Course</button>
                     </form>

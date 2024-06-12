@@ -77,6 +77,15 @@ class CourseServiceImplTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    void saveCourseWithInvalidCourse() {
+        CourseDTO courseDTO = new CourseDTO();
+
+        assertThrows(IllegalEntityException.class, () -> courseService.saveCourse(courseDTO));
+        verify(repository, never()).save(any(Course.class));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteCourseById() {
         Course course = new Course();
         course.setName("Existing Course");

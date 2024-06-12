@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
     public void updateCourse(Integer courseId, CourseDTO updatedCourse) {
         isValidCourse(updatedCourse);
 
