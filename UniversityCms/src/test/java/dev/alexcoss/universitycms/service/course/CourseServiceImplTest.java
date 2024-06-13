@@ -41,7 +41,9 @@ class CourseServiceImplTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void updateCourseWithValidCourse() {
+        int courseId = 1;
         CourseDTO updatedCourseDTO = new CourseDTO();
+        updatedCourseDTO.setId(courseId);
         updatedCourseDTO.setName("Updated Course");
 
         Course existingCourse = new Course();
@@ -51,9 +53,9 @@ class CourseServiceImplTest {
         when(modelMapper.map(any(CourseDTO.class), eq(Course.class))).thenReturn(existingCourse);
         when(repository.save(any(Course.class))).thenReturn(existingCourse);
 
-        courseService.updateCourse(1, updatedCourseDTO);
+        courseService.updateCourse(updatedCourseDTO);
 
-        verify(repository, times(1)).findById(1);
+        verify(repository, times(1)).findById(courseId);
         verify(repository, times(1)).save(existingCourse);
         assertEquals("Updated Course", existingCourse.getName());
     }

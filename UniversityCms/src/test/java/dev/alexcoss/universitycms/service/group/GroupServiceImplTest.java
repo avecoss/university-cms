@@ -42,8 +42,10 @@ class GroupServiceImplTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void updateGroupWithValidGroup() {
+        int groupId = 1;
         GroupDTO updatedGroupDTO = new GroupDTO();
         updatedGroupDTO.setName("Updated Group");
+        updatedGroupDTO.setId(groupId);
 
         Group existingGroup = new Group();
         existingGroup.setName("Existing Group");
@@ -52,9 +54,9 @@ class GroupServiceImplTest {
         when(modelMapper.map(any(GroupDTO.class), eq(Group.class))).thenReturn(existingGroup);
         when(repository.save(any(Group.class))).thenReturn(existingGroup);
 
-        groupService.updateGroup(1, updatedGroupDTO);
+        groupService.updateGroup(updatedGroupDTO);
 
-        verify(repository, times(1)).findById(1);
+        verify(repository, times(1)).findById(groupId);
         verify(repository, times(1)).save(existingGroup);
         assertEquals("Updated Group", existingGroup.getName());
     }

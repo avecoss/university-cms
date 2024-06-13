@@ -66,17 +66,17 @@ public class CourseServiceImpl implements CourseService<CourseDTO> {
     @Transactional
     @Override
     @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
-    public void updateCourse(Integer courseId, CourseDTO updatedCourse) {
+    public void updateCourse(CourseDTO updatedCourse) {
         isValidCourse(updatedCourse);
 
-        repository.findById(courseId)
+        repository.findById(updatedCourse.getId())
             .map(course -> {
                 course.setName(updatedCourse.getName());
                 course.setTeacher(modelMapper.map(updatedCourse.getTeacher(), Teacher.class));
                 return repository.save(course);
             })
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("course.errors.not_found",
-                new Object[] {courseId}, "Course with ID {0} not found!", LocaleContextHolder.getLocale())));
+                new Object[] {updatedCourse.getId()}, "Course with ID {0} not found!", LocaleContextHolder.getLocale())));
     }
 
     @Transactional

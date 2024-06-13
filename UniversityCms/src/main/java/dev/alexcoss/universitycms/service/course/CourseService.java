@@ -10,7 +10,7 @@ public interface CourseService<T>{
     T getCourseById(Integer id);
     T getCourseById(Integer id, Locale locale);
     List<T> getAllByIds(Iterable<Integer> ids);
-    void updateCourse(Integer id, T updated);
+    void updateCourse(T updated);
     void saveCourse(T course);
     void deleteCourseById(Integer id);
 }
