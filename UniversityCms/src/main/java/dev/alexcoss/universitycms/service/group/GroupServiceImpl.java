@@ -60,17 +60,17 @@ public class GroupServiceImpl implements GroupService<GroupDTO> {
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void updateGroup(Integer id, GroupDTO updated) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
+    public void updateGroup(GroupDTO updated) {
         isValidGroup(updated);
 
-        repository.findById(id)
+        repository.findById(updated.getId())
             .map(group -> {
                 group.setName(updated.getName());
                 return repository.save(group);
             })
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("group.errors.not_found",
-                new Object[]{id}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
+                new Object[]{updated.getId()}, "Group with ID {0} not found!", LocaleContextHolder.getLocale())));
     }
 
     @Transactional

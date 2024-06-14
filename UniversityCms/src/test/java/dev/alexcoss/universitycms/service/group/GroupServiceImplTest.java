@@ -6,10 +6,12 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
+import dev.alexcoss.universitycms.model.Course;
 import dev.alexcoss.universitycms.model.Group;
 import dev.alexcoss.universitycms.repository.GroupRepository;
 
 import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
+import dev.alexcoss.universitycms.util.exception.IllegalEntityException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,8 +42,10 @@ class GroupServiceImplTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void updateGroupWithValidGroup() {
+        int groupId = 1;
         GroupDTO updatedGroupDTO = new GroupDTO();
         updatedGroupDTO.setName("Updated Group");
+        updatedGroupDTO.setId(groupId);
 
         Group existingGroup = new Group();
         existingGroup.setName("Existing Group");
@@ -50,9 +54,9 @@ class GroupServiceImplTest {
         when(modelMapper.map(any(GroupDTO.class), eq(Group.class))).thenReturn(existingGroup);
         when(repository.save(any(Group.class))).thenReturn(existingGroup);
 
-        groupService.updateGroup(1, updatedGroupDTO);
+        groupService.updateGroup(updatedGroupDTO);
 
-        verify(repository, times(1)).findById(1);
+        verify(repository, times(1)).findById(groupId);
         verify(repository, times(1)).save(existingGroup);
         assertEquals("Updated Group", existingGroup.getName());
     }
@@ -72,6 +76,15 @@ class GroupServiceImplTest {
         groupService.saveGroup(groupDTO);
 
         verify(repository, times(1)).save(group);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void saveGroupWithInvalidGroup() {
+        GroupDTO groupDTO = new GroupDTO();
+
+        assertThrows(IllegalEntityException.class, () -> groupService.saveGroup(groupDTO));
+        verify(repository, never()).save(any(Group.class));
     }
 
     @Test

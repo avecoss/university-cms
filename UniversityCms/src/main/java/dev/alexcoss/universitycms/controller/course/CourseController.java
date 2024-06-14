@@ -38,7 +38,7 @@ public class CourseController {
 
     @PatchMapping
     public String updateCourse(@ModelAttribute("course") @Valid CourseDTO course, BindingResult bindingResult,
-                               @PathVariable int id, @RequestParam Long teacherId, Model model) {
+                               @RequestParam Long teacherId, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("teachers", teacherService.getAllTeachers());
             return "courses/c_edit";
@@ -46,7 +46,7 @@ public class CourseController {
 
         course.setTeacher(teacherService.getTeacherById(teacherId));
 
-        courseService.updateCourse(id, course);
+        courseService.updateCourse(course);
         return "redirect:/courses";
     }
 

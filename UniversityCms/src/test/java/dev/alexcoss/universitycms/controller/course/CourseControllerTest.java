@@ -98,7 +98,7 @@ class CourseControllerTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/courses"));
 
-        verify(courseService, times(1)).updateCourse(eq(courseId), any(CourseDTO.class));
+        verify(courseService, times(1)).updateCourse(any(CourseDTO.class));
     }
 
     @Test

@@ -29,12 +29,11 @@ public class GroupController {
     }
 
     @PatchMapping
-    public String updateGroup(@ModelAttribute("group") @Valid GroupDTO group, BindingResult bindingResult,
-                               @PathVariable int id) {
+    public String updateGroup(@ModelAttribute("group") @Valid GroupDTO group, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "groups/g_edit";
 
-        groupService.updateGroup(id, group);
+        groupService.updateGroup(group);
         return "redirect:/groups";
     }
 

@@ -7,7 +7,7 @@ public interface GroupService<T>{
     List<T> getAllGroups();
     List<T> getGroupsByLetters(String letter);
     T getGroupById(Integer id);
-    void updateGroup(Integer id, T updated);
+    void updateGroup(T updated);
     void saveGroup(T Group);
     void deleteGroupById(Integer id);
 }
