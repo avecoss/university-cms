@@ -40,7 +40,7 @@ public class TeacherController {
 
     @PatchMapping
     public String updateTeacher(@ModelAttribute("teacherEdit") @Valid TeacherCreateEditDTO teacher, BindingResult bindingResult,
-                                @PathVariable long id, @RequestParam(value = "courseIds", required = false) List<Integer> courseIds,
+                                @RequestParam(value = "courseIds", required = false) List<Integer> courseIds,
                                 Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("courses", courseService.getAllCourses());
@@ -48,7 +48,7 @@ public class TeacherController {
         }
         teacher.setCourseIds(courseIds);
 
-        teacherService.updateTeacher(id, teacher, locale);
+        teacherService.updateTeacher(teacher, locale);
         return "redirect:/teachers";
     }
 

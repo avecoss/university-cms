@@ -43,13 +43,12 @@ public class TeachersController {
 
     @PostMapping()
     public String createTeacher(@ModelAttribute("teacherCreate") @Valid TeacherCreateEditDTO teacher, BindingResult bindingResult,
-                                @RequestParam(value = "courseIds", required = false) List<Integer> courseIds, Model model, Locale locale) {
+                                Model model, Locale locale) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("teacherView", new TeacherViewDTO());
             model.addAttribute("courses", courseService.getAllCourses());
             return "teachers/t_new";
         }
-        teacher.setCourseIds(courseIds);
 
         teacherService.saveTeacher(teacher, locale);
         return "redirect:/teachers";

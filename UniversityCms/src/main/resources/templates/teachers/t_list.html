@@ -56,7 +56,7 @@
 
                         <div class="d-flex">
                             <a th:href="@{/teachers/{id}(id=${teacher.getId()})}" class="btn btn-primary btn-custom-width me-2">View</a>
-                            <a sec:authorize="hasRole('ADMIN')" th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary btn-custom-width me-2">Edit</a>
+                            <a sec:authorize="hasRole('ADMIN') or hasRole('STUFF')" th:href="@{/teachers/{id}/edit(id=${teacher.getId()})}" class="btn btn-secondary btn-custom-width me-2">Edit</a>
                             <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{/teachers/{id}(id=${teacher.getId()})}">
                                 <button type="submit" class="btn btn-danger btn-custom-width">Delete</button>
                             </form>

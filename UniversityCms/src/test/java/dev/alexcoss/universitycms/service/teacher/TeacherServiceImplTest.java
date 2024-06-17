@@ -59,7 +59,7 @@ class TeacherServiceImplTest {
     @PreAuthorize("hasRole('ADMIN')")
     public void testUpdateTeacher() {
         Long teacherId = 1L;
-        TeacherCreateEditDTO updated = TeacherCreateEditDTO.builder().user(getUserDTO()).build();
+        TeacherCreateEditDTO updated = TeacherCreateEditDTO.builder().id(teacherId).user(getUserDTO()).build();
         User user = User.builder().firstName("editFirstname").lastName("editLastname").build();
         Teacher teacher = Teacher.builder().user(user).courses(Set.of()).build();
 
@@ -69,7 +69,7 @@ class TeacherServiceImplTest {
         when(teacherBuilder.buildEntity(any(TeacherCreateEditDTO.class))).thenReturn(teacher);
         when(teacherRepository.findById(teacherId)).thenReturn(java.util.Optional.of(teacherFromDB));
 
-        teacherService.updateTeacher(teacherId, updated);
+        teacherService.updateTeacher(updated);
 
         verify(teacherRepository, times(1)).findById(teacherId);
     }

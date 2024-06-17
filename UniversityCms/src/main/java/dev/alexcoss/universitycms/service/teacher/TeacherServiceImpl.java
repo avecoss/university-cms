@@ -83,16 +83,16 @@ public class TeacherServiceImpl implements TeacherService<TeacherViewDTO, Teache
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void updateTeacher(Long id, TeacherCreateEditDTO updated) {
-        applyEntityUpdates(id, updated, LocaleContextHolder.getLocale());
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
+    public void updateTeacher(TeacherCreateEditDTO updated) {
+        applyEntityUpdates(updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void updateTeacher(Long id, TeacherCreateEditDTO updated, Locale locale) {
-        applyEntityUpdates(id, updated, locale);
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
+    public void updateTeacher(TeacherCreateEditDTO updated, Locale locale) {
+        applyEntityUpdates(updated, locale);
     }
 
     @Transactional
@@ -121,12 +121,12 @@ public class TeacherServiceImpl implements TeacherService<TeacherViewDTO, Teache
                 new Object[]{id}, "Teacher with ID {0} not found!", locale)));
     }
 
-    private void applyEntityUpdates(Long id, TeacherCreateEditDTO updated, Locale locale) {
+    private void applyEntityUpdates(TeacherCreateEditDTO updated, Locale locale) {
         isValidTeacher(updated, locale);
 
         Teacher teacherWithCourses = teacherBuilder.buildEntity(updated);
 
-        teacherRepository.findById(id)
+        teacherRepository.findById(updated.getId())
             .map(teacher -> {
                 teacher.getUser().setFirstName(teacherWithCourses.getUser().getFirstName());
                 teacher.getUser().setLastName(teacherWithCourses.getUser().getLastName());
@@ -135,6 +135,6 @@ public class TeacherServiceImpl implements TeacherService<TeacherViewDTO, Teache
                 return teacher;
             })
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("teacher.errors.not_found",
-                new Object[]{id}, "Teacher with ID {0} not found!", locale)));
+                new Object[]{updated.getId()}, "Teacher with ID {0} not found!", locale)));
     }
 }
