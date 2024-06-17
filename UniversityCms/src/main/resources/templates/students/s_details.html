@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
-                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/students/{id}/edit(id=${studentView.getId()})}" class="btn btn-secondary me-2">Edit Student</a>
+                    <a sec:authorize="hasRole('ADMIN') or hasRole('STUFF')" th:href="@{/students/{id}/edit(id=${studentView.getId()})}" class="btn btn-secondary me-2">Edit Student</a>
                     <form sec:authorize="hasRole('ADMIN')" th:method="DELETE" th:action="@{/students/{id}(id=${studentView.getId()})}">
                         <button type="submit" class="btn btn-danger">Delete Student</button>
                     </form>

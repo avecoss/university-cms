@@ -59,17 +59,17 @@ class StudentServiceImplTest {
     @PreAuthorize("hasRole('ADMIN')")
     public void testUpdateStudent() {
         Long studentId = 1L;
-        StudentEditCreateDTO updated = StudentEditCreateDTO.builder().user(getUserDTO()).build();
+        StudentEditCreateDTO updated = StudentEditCreateDTO.builder().id(studentId).user(getUserDTO()).build();
         User user = User.builder().firstName("editFirstname").lastName("editLastname").build();
-        Student student = Student.builder().user(user).group(new Group()).courses(Set.of()).build();
+        Student student = Student.builder().id(studentId).user(user).group(new Group()).courses(Set.of()).build();
 
-        Student studentFromDB = Student.builder().user(User.builder().firstName("firstname").lastName("lastname").build())
+        Student studentFromDB = Student.builder().id(studentId).user(User.builder().firstName("firstname").lastName("lastname").build())
             .group(new Group()).courses(Set.of()).build();
 
         when(studentBuilder.buildEntity(any(StudentEditCreateDTO.class))).thenReturn(student);
         when(studentRepository.findById(studentId)).thenReturn(java.util.Optional.of(studentFromDB));
 
-        studentService.updateStudent(studentId, updated);
+        studentService.updateStudent(updated);
 
         verify(studentRepository, times(1)).findById(studentId);
     }

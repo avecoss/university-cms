@@ -42,13 +42,13 @@ public class StudentController {
 
     @PatchMapping
     public String updateStudent(@ModelAttribute("student") @Valid StudentEditCreateDTO student, BindingResult bindingResult,
-                                @PathVariable long id, Locale locale, Model model) {
+                                Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("groups", groupService.getAllGroups());
             return "students/s_edit";
         }
 
-        studentService.updateStudent(id, student, locale);
+        studentService.updateStudent(student, locale);
         return "redirect:/students";
     }
 

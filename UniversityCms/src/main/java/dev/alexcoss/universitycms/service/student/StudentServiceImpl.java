@@ -91,16 +91,16 @@ public class StudentServiceImpl implements StudentService<StudentViewDTO, Studen
 
     @Transactional
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    public void updateStudent(Long id, StudentEditCreateDTO updated) {
-        applyEntityUpdates(id, updated, LocaleContextHolder.getLocale());
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
+    public void updateStudent(StudentEditCreateDTO updated) {
+        applyEntityUpdates(updated, LocaleContextHolder.getLocale());
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUFF')")
     @Override
-    public void updateStudent(Long id, StudentEditCreateDTO updated, Locale locale) {
-        applyEntityUpdates(id, updated, locale);
+    public void updateStudent(StudentEditCreateDTO updated, Locale locale) {
+        applyEntityUpdates(updated, locale);
     }
 
     @Transactional
@@ -129,12 +129,12 @@ public class StudentServiceImpl implements StudentService<StudentViewDTO, Studen
                 new Object[]{id}, "Student with ID {0} not found!", locale)));
     }
 
-    private void applyEntityUpdates(Long id, StudentEditCreateDTO updated, Locale locale) {
+    private void applyEntityUpdates(StudentEditCreateDTO updated, Locale locale) {
         isValidStudent(updated, locale);
 
         Student buildStudent = studentBuilder.buildEntity(updated);
 
-        studentRepository.findById(id)
+        studentRepository.findById(updated.getId())
             .map(student -> {
                 student.getUser().setFirstName(buildStudent.getUser().getFirstName());
                 student.getUser().setLastName(buildStudent.getUser().getLastName());
@@ -144,6 +144,6 @@ public class StudentServiceImpl implements StudentService<StudentViewDTO, Studen
                 return student;
             })
             .orElseThrow(() -> new EntityNotExistException(messageSource.getMessage("student.errors.not_found",
-                new Object[]{id}, "Student with ID {0} not found!", locale)));
+                new Object[]{updated.getId()}, "Student with ID {0} not found!", locale)));
     }
 }
