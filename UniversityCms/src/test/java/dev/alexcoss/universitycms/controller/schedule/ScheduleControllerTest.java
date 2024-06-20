@@ -117,6 +117,28 @@ class ScheduleControllerTest {
         verify(scheduleService, times(1)).deleteSchedule(scheduleId);
     }
 
+
+    @Test
+    @WithMockUser
+    public void testGetAllSchedulesByGroupId() throws Exception {
+        Integer groupId = 1;
+        List<ScheduleDTO> scheduleDTOS = List.of(getScheduleDTO(1L), getScheduleDTO(2L));
+        GroupDTO group1 = GroupDTO.builder().id(1).name("group").build();
+        GroupDTO group2 = GroupDTO.builder().id(2).name("group").build();
+
+        when(scheduleService.getAllByGroupId(groupId)).thenReturn(scheduleDTOS);
+        when(groupService.getAllGroups()).thenReturn(List.of(group1, group2));
+
+        mockMvc.perform(get("/schedules/group").param("groupId",groupId.toString()))
+            .andExpect(status().isOk())
+            .andExpect(view().name("schedules/sch_list"))
+            .andExpect(model().attributeExists("schedules"))
+            .andExpect(model().attributeExists("groups"));
+
+        verify(scheduleService, times(1)).getAllByGroupId(groupId);
+        verify(groupService, times(1)).getAllGroups();
+    }
+
     private ScheduleDTO getScheduleDTO(long id) {
         return ScheduleDTO.builder()
             .id(id)

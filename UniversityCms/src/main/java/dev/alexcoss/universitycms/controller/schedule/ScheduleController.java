@@ -26,6 +26,7 @@ public class ScheduleController {
     @GetMapping
     public String allSchedules(Model model) {
         model.addAttribute("schedules", scheduleService.getAllSortedByStartTime());
+        model.addAttribute("groups", groupService.getAllGroups());
         return "schedules/sch_list";
     }
 
@@ -78,5 +79,12 @@ public class ScheduleController {
     public String deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteSchedule(id);
         return "redirect:/schedules";
+    }
+
+    @GetMapping("/group")
+    public String allSchedulesByGroupId(@RequestParam("groupId") Integer groupId, Model model) {
+        model.addAttribute("schedules", scheduleService.getAllByGroupId(groupId));
+        model.addAttribute("groups", groupService.getAllGroups());
+        return "schedules/sch_list";
     }
 }

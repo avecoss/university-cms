@@ -63,6 +63,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.deleteById(id);
     }
 
+    @Override
+    public List<ScheduleDTO> getAllByGroupId(Integer groupId) {
+        return scheduleRepository.findAllByGroupId(groupId).stream()
+            .map(this::convertToDTO)
+            .toList();
+    }
+
     private ScheduleDTO convertToDTO(Schedule schedule) {
         return modelMapper.map(schedule, ScheduleDTO.class);
     }

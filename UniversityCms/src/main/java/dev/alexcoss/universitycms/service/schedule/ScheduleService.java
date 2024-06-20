@@ -16,4 +16,6 @@ public interface ScheduleService {
     void updateSchedule(ScheduleEditCreateDTO scheduleDTO);
 
     void deleteSchedule(Long id);
+
+    List<ScheduleDTO> getAllByGroupId(Integer groupId);
 }
