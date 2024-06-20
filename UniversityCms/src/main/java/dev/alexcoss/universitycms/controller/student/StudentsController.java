@@ -47,8 +47,6 @@ public class StudentsController {
 
     @PostMapping()
     public String createStudent(@ModelAttribute("studentCreate") @Valid StudentEditCreateDTO student, BindingResult bindingResult,
-                                @RequestParam Integer groupId,
-                                @RequestParam (value = "courseIds", required = false) List<Integer> courseIds,
                                 Locale locale, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("studentView", new StudentViewDTO());

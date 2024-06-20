@@ -17,9 +17,9 @@ public interface StudentService<T extends StudentDTO, E extends StudentDTO> {
 
     T getStudentById(Long id, Locale locale);
 
-    void updateStudent(Long id, E updated);
+    void updateStudent(E updated);
 
-    void updateStudent(Long id, E updated, Locale locale);
+    void updateStudent(E updated, Locale locale);
 
     void saveStudent(E student);
 

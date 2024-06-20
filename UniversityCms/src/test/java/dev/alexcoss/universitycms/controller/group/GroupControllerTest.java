@@ -3,11 +3,10 @@ package dev.alexcoss.universitycms.controller.group;
 import dev.alexcoss.universitycms.dto.view.AuthorityDTO;
 import dev.alexcoss.universitycms.dto.view.GroupDTO;
 import dev.alexcoss.universitycms.dto.view.student.StudentViewDTO;
-import dev.alexcoss.universitycms.dto.view.teacher.TeacherViewDTO;
 import dev.alexcoss.universitycms.dto.view.user.UserDTO;
 import dev.alexcoss.universitycms.enumerated.Role;
-import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import dev.alexcoss.universitycms.service.group.GroupService;
+import dev.alexcoss.universitycms.util.exception.EntityNotExistException;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;

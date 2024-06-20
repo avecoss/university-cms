@@ -15,9 +15,9 @@ public interface TeacherService<T extends TeacherDTO, E extends TeacherDTO> {
 
     T getTeacherById(Long id);
 
-    void updateTeacher(Long id, E updated, Locale locale);
+    void updateTeacher(E updated, Locale locale);
 
-    void updateTeacher(Long id, E updated);
+    void updateTeacher(E updated);
 
     void saveTeacher(E Teacher, Locale locale);
 
