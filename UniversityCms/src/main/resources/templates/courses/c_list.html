@@ -48,7 +48,7 @@
                 <div class="card mb-4 shadow rounded">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${course.getName()}"></h5>
-                        <p class="card-text" th:text="${course.getTeacher().getUser().getFirstName() + ' ' + course.getTeacher().getUser().getLastName()}"></p>
+                        <p sec:authorize="isAuthenticated()" class="card-text" th:text="${course.getTeacher().getUser().getFirstName() + ' ' + course.getTeacher().getUser().getLastName()}"></p>
 
                         <div class="d-flex">
                             <a th:href="@{/courses/{id}(id=${course.getId()})}" class="btn btn-primary btn-custom-width me-2">View</a>
