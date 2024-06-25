@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +28,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize ->
                 authorize
                     .requestMatchers("/webjars/**", "/css/**", "/icons/**", "/img/**").permitAll()
-                    .requestMatchers("/login", "/error", "/registration", "/home").permitAll()
+                    .requestMatchers("/login", "/error", "/registration", "/home", "/courses").permitAll()
+                    .requestMatchers(RegexRequestMatcher.regexMatcher("/courses/\\d+")).permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated())
             .formLogin(login ->
