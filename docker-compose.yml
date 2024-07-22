@@ -1,7 +1,7 @@
 name: u-cms
 
 services:
-    cms-service:
+    cms_service:
         image: university-cms:lasted
         build:
             context: ./UniversityCms
