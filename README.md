@@ -4,13 +4,11 @@ UniversityCms is a comprehensive MVC project designed for managing university co
 
 ## Table of Contents
 
+- [Technologies Used](#technologies-used)
 - [Features](#features)
 - [Getting Started](#getting-started)
+- [Screenshots](#screenshots)
 - [Configuration](#configuration)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Security](#security)
-- [Swagger Documentation](#swagger-documentation)
 - [Contributors](#contributors)
 
 ## Technologies Used
