@@ -39,6 +39,3 @@ build/
 ### Logs ###
 /logs
 *.log
-
-### Dev ###
-/UniversityGenerator

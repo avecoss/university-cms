@@ -1,14 +1,27 @@
 name: u-cms
 
 services:
+    cms-service:
+        image: university-cms:lasted
+        build:
+            context: ./UniversityCms
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db_pg
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://db_pg:5432/university_database
+        container_name: "university-cms"
 
     db_pg:
         image: postgres:16-alpine
         restart: always
         environment:
-            POSTGRES_DB: university_db
-            POSTGRES_USER: admin
-            POSTGRES_PASSWORD: 1111
+            POSTGRES_DB: university_database
+            POSTGRES_USER: your_username
+            POSTGRES_PASSWORD: your_password
         ports:
             - "5433:5432"
         container_name: "db-pg"
@@ -17,5 +30,5 @@ services:
         image: adminer
         restart: always
         ports:
-            - 8090:8080
+            - "8090:8080"
         container_name: "adminer"

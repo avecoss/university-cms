@@ -4,10 +4,9 @@ spring:
 
     datasource:
         driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://localhost:5433/university_db
-        username: admin
-        password: 1111
-
+        url: jdbc:postgresql://localhost:5433/university_database
+        username: your_username
+        password: your_password
 
     flyway:
         locations: db/migration
@@ -36,4 +35,3 @@ university-cms:
     service:
         data-generator:
             url: http://localhost:8085
-
